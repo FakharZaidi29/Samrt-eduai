@@ -113,7 +113,7 @@ function VideoLink({ searchUrl, videoTitle }) {
         href={searchUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center gap-3 p-3 bg-red-50 dark:bg-red-900/20 border border-blue-200 dark:border-blue-900/40 rounded-xl hover:bg-red-100 dark:hover:bg-blue-900/30 transition-colors group"
+        className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/40 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors group"
       >
         <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center flex-shrink-0">
           <Play size={14} className="text-white ml-0.5" fill="white" />
@@ -137,7 +137,7 @@ function renderContent(content) {
         return <strong key={j} className="font-semibold text-slate-900 dark:text-white">{part.slice(2, -2)}</strong>;
       if (part.startsWith('`') && part.endsWith('`') && part.length > 2)
         return (
-          <code key={j} className="bg-slate-200/70 dark:bg-zinc-700 text-red-600 dark:text-blue-300 px-1.5 py-0.5 rounded text-[11px] font-mono">
+          <code key={j} className="bg-slate-200/70 dark:bg-zinc-700 text-blue-600 dark:text-blue-300 px-1.5 py-0.5 rounded text-[11px] font-mono">
             {part.slice(1, -1)}
           </code>
         );
@@ -184,7 +184,7 @@ function renderContent(content) {
     if (trimmed.startsWith('`') && trimmed.endsWith('`') && trimmed.length > 2) {
       return (
         <div key={i} className="my-2">
-          <code className="block bg-slate-100 dark:bg-zinc-800 text-red-600 dark:text-blue-300 px-4 py-2.5 rounded-xl text-xs font-mono border border-slate-200 dark:border-zinc-700">
+          <code className="block bg-slate-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-300 px-4 py-2.5 rounded-xl text-xs font-mono border border-slate-200 dark:border-zinc-700">
             {trimmed.slice(1, -1)}
           </code>
         </div>
@@ -242,7 +242,7 @@ function AIMessage({ message }) {
 
       <div className="flex-1 min-w-0 max-w-2xl">
         <div className="flex items-center gap-2 mb-1.5">
-          <span className="text-xs font-semibold text-red-600 dark:text-blue-400">EduAI Tutor</span>
+          <span className="text-xs font-semibold text-blue-600 dark:text-blue-400">EduAI Tutor</span>
           <span className="text-[11px] text-slate-400 dark:text-slate-500">{time}</span>
         </div>
 
@@ -312,7 +312,7 @@ function TypingIndicator() {
           {[0, 150, 300].map((delay) => (
             <span
               key={delay}
-              className="w-2 h-2 bg-red-500 rounded-full animate-bounce"
+              className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"
               style={{ animationDelay: `${delay}ms` }}
             />
           ))}
@@ -334,7 +334,7 @@ function EmptyState({ onNewChat }) {
       </p>
       <button
         onClick={onNewChat}
-        className="flex items-center gap-2 bg-blue-600 hover:bg-red-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors shadow-sm shadow-blue-200/50 dark:shadow-blue-900/30"
+        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors shadow-sm shadow-blue-200/50 dark:shadow-blue-900/30"
       >
         <Plus size={16} />
         New Chat
@@ -386,6 +386,7 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [mobileSessionsOpen, setMobileSessionsOpen] = useState(false);
   const pendingTopicRef = useRef(null);
 
   const messagesEndRef = useRef(null);
@@ -476,12 +477,14 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
   }, []);
 
   const handleSelectSession = (sessionId) => {
-    if (sessionId === activeSessionId) return;
+    if (sessionId === activeSessionId) { setMobileSessionsOpen(false); return; }
     setActiveSessionId(sessionId);
     loadMessages(sessionId);
+    setMobileSessionsOpen(false);
   };
 
   const handleNewChat = async () => {
+    setMobileSessionsOpen(false);
     try {
       const session = await api.chat.createSession('New Chat');
       setSessions((prev) => [
@@ -572,13 +575,51 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
   return (
     <div className="flex h-full overflow-hidden">
 
+      {/* ── Mobile sessions drawer overlay ──────────────────────────────── */}
+      {mobileSessionsOpen && (
+        <div className="fixed inset-0 z-40 md:hidden" onClick={() => setMobileSessionsOpen(false)}>
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+          <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-zinc-900 rounded-t-3xl max-h-[75vh] flex flex-col" onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-zinc-800">
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Conversations</h3>
+              <button onClick={handleNewChat} className="flex items-center gap-1.5 bg-blue-600 text-white text-xs font-semibold px-3 py-2 rounded-xl">
+                <Plus size={13} /> New Chat
+              </button>
+            </div>
+            <div className="px-3 py-2 border-b border-slate-50 dark:border-zinc-800">
+              <div className="flex items-center gap-2 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl px-3 py-2">
+                <Search size={13} className="text-slate-400 flex-shrink-0" />
+                <input type="text" value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                  placeholder="Search…" className="flex-1 bg-transparent text-xs text-slate-700 dark:text-slate-300 placeholder-slate-400 outline-none" />
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto px-2 py-2">
+              {sessionsLoading ? (
+                <div className="flex justify-center py-8"><Loader2 size={18} className="animate-spin text-blue-500" /></div>
+              ) : filteredSessions.length === 0 ? (
+                <p className="text-xs text-slate-400 px-3 py-4 text-center">{searchQuery ? 'No results' : 'No chats yet'}</p>
+              ) : filteredSessions.map(session => {
+                const isActive = activeSessionId === session._id;
+                return (
+                  <button key={session._id} onClick={() => handleSelectSession(session._id)}
+                    className={`w-full text-left px-3 py-3 rounded-xl mb-0.5 transition-all ${isActive ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/40' : 'hover:bg-slate-50 dark:hover:bg-zinc-800'}`}>
+                    <p className={`text-sm font-medium truncate ${isActive ? 'text-blue-700 dark:text-blue-300' : 'text-slate-700 dark:text-slate-300'}`}>{session.title}</p>
+                    {session.preview && <p className="text-xs text-slate-400 dark:text-slate-500 truncate mt-0.5">{session.preview}</p>}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ── Left: Chat history panel ─────────────────────────────────────── */}
       <div className="hidden md:flex flex-col w-64 border-r border-slate-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 flex-shrink-0">
         {/* New chat button */}
         <div className="p-4 border-b border-slate-100 dark:border-zinc-800">
           <button
             onClick={handleNewChat}
-            className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-red-700 active:scale-[0.98] text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm shadow-blue-200/50 dark:shadow-blue-900/30"
+            className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm shadow-blue-200/50 dark:shadow-blue-900/30"
           >
             <Plus size={16} />
             New Chat
@@ -622,7 +663,7 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
                     onClick={() => handleSelectSession(session._id)}
                     className={`w-full text-left px-3 py-2.5 rounded-xl transition-all duration-200 pr-8 ${
                       isActive
-                        ? 'bg-red-50 dark:bg-red-900/20 border border-blue-100 dark:border-blue-900/40'
+                        ? 'bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/40'
                         : 'hover:bg-slate-50 dark:hover:bg-zinc-800 border border-transparent'
                     }`}
                   >
@@ -665,6 +706,19 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
 
       {/* ── Right: Chat area ──────────────────────────────────────────────── */}
       <div className="flex-1 flex flex-col bg-white dark:bg-black min-w-0">
+
+        {/* Mobile-only top bar */}
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-100 dark:border-zinc-800 bg-white dark:bg-zinc-900 md:hidden flex-shrink-0">
+          <button onClick={() => setMobileSessionsOpen(true)}
+            className="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-zinc-800 px-3 py-1.5 rounded-xl">
+            <MessageSquare size={13} />
+            Chats ({sessions.length})
+          </button>
+          <button onClick={handleNewChat}
+            className="flex items-center gap-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-xl transition-colors">
+            <Plus size={13} /> New Chat
+          </button>
+        </div>
 
         {!activeSessionId ? (
           <EmptyState onNewChat={handleNewChat} />
@@ -741,7 +795,7 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
             {/* Input bar */}
             <div className="px-5 pb-5 flex-shrink-0">
               <div className="flex items-end gap-3">
-                <div className="flex-1 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 rounded-2xl px-4 py-3 focus-within:border-blue-300 dark:focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-red-100/60 dark:focus-within:ring-red-900/40 transition-all duration-200">
+                <div className="flex-1 bg-slate-50 dark:bg-zinc-800/80 border border-slate-200 dark:border-zinc-700 rounded-2xl px-4 py-3 focus-within:border-blue-300 dark:focus-within:border-blue-600 focus-within:ring-2 focus-within:ring-blue-100/60 dark:focus-within:ring-blue-900/40 transition-all duration-200">
                   <textarea
                     ref={textareaRef}
                     value={input}
@@ -771,7 +825,7 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
                   disabled={!input.trim() || isTyping}
                   className={`p-3.5 rounded-2xl transition-all duration-200 flex-shrink-0 ${
                     input.trim() && !isTyping
-                      ? 'bg-blue-600 hover:bg-red-700 active:scale-95 text-white shadow-sm shadow-blue-200/50 dark:shadow-blue-900/30'
+                      ? 'bg-blue-600 hover:bg-blue-700 active:scale-95 text-white shadow-sm shadow-blue-200/50 dark:shadow-blue-900/30'
                       : 'bg-slate-100 dark:bg-zinc-800 text-slate-400 cursor-not-allowed'
                   }`}
                 >

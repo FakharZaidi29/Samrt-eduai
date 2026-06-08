@@ -6,6 +6,12 @@
   * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+
+  html, body {
+    overscroll-behavior: none;
   }
 
   ::-webkit-scrollbar { width: 5px; height: 5px; }

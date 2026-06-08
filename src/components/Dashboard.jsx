@@ -329,7 +329,7 @@ export default function Dashboard({ setActiveView, goToChat }) {
 
             {statsLoading ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 size={20} className="animate-spin text-red-500" />
+                <Loader2 size={20} className="animate-spin text-blue-500" />
               </div>
             ) : (
               <div className="space-y-4">
@@ -373,8 +373,8 @@ export default function Dashboard({ setActiveView, goToChat }) {
         {/* AI quick-action strip */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
-            { icon: MessageSquare, label: 'Ask AI Tutor', sub: 'Get instant explanations', color: 'red', gradient: 'from-red-50 to-red-100/50 dark:from-red-900/20 dark:to-red-900/10', border: 'border-blue-100 dark:border-blue-900/40', view: 'chat' },
-            { icon: BookOpen, label: 'Generate Notes', sub: 'Summarise any topic fast', color: 'red', gradient: 'from-red-50 to-red-100/50 dark:from-red-900/20 dark:to-red-900/10', border: 'border-blue-100 dark:border-blue-900/40', view: 'planner' },
+            { icon: MessageSquare, label: 'Ask AI Tutor', sub: 'Get instant explanations', color: 'red', gradient: 'from-blue-50 to-blue-100/50 dark:from-blue-900/20 dark:to-blue-900/10', border: 'border-blue-100 dark:border-blue-900/40', view: 'chat' },
+            { icon: BookOpen, label: 'Generate Notes', sub: 'Summarise any topic fast', color: 'red', gradient: 'from-blue-50 to-blue-100/50 dark:from-blue-900/20 dark:to-blue-900/10', border: 'border-blue-100 dark:border-blue-900/40', view: 'planner' },
             { icon: Target, label: "Set Today's Goal", sub: 'Track daily objectives', color: 'emerald', gradient: 'from-emerald-50 to-emerald-100/50 dark:from-emerald-900/20 dark:to-emerald-900/10', border: 'border-emerald-100 dark:border-emerald-900/40', view: 'planner' },
           ].map((item) => {
             const c = COLOR[item.color];

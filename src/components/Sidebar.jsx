@@ -73,7 +73,7 @@ export default function Sidebar({ activeView, setActiveView, darkMode, setDarkMo
     <div className="flex flex-col h-full bg-white dark:bg-zinc-900 border-r border-slate-200 dark:border-zinc-800">
       {/* Logo */}
       <div className="flex items-center gap-3 px-5 py-5 border-b border-slate-100 dark:border-zinc-800">
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-sm shadow-red-200 dark:shadow-red-900">
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center shadow-sm shadow-blue-200 dark:shadow-blue-900">
           <Sparkles size={17} className="text-white" />
         </div>
         <div>

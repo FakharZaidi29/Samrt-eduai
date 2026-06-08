@@ -271,7 +271,7 @@ export default function LandingPage({ onGetStarted, onLogin }) {
           </h2>
           <p className="text-slate-400">From Class 1 to PhD — EduAI supports your entire education journey</p>
         </div>
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-3">
           {[
             { label: 'Class 1-5', emoji: '📚', color: 'from-emerald-500 to-teal-600' },
             { label: 'Class 6-8', emoji: '✏️', color: 'from-blue-500 to-cyan-600' },
@@ -315,7 +315,7 @@ export default function LandingPage({ onGetStarted, onLogin }) {
       </section>
 
       {/* ── Footer ──────────────────────────────────────────────────── */}
-      <footer className="border-t border-white/5 px-6 md:px-12 py-8 flex items-center justify-between">
+      <footer className="border-t border-white/5 px-6 md:px-12 py-8 flex flex-col sm:flex-row items-center gap-3 justify-between">
         <div className="flex items-center gap-2">
           <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
             <Sparkles size={11} className="text-white" />
