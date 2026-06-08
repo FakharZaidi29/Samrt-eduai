@@ -132,9 +132,11 @@ function VideoLink({ searchUrl, videoTitle }) {
 
 function renderContent(content) {
   const formatInline = (text) =>
-    text.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, j) => {
+    text.split(/(\*\*[^*]+\*\*|_[^_]+_|`[^`]+`)/g).map((part, j) => {
       if (part.startsWith('**') && part.endsWith('**') && part.length > 4)
         return <strong key={j} className="font-semibold text-slate-900 dark:text-white">{part.slice(2, -2)}</strong>;
+      if (part.startsWith('_') && part.endsWith('_') && part.length > 2)
+        return <em key={j} className="italic">{part.slice(1, -1)}</em>;
       if (part.startsWith('`') && part.endsWith('`') && part.length > 2)
         return (
           <code key={j} className="bg-slate-200/70 dark:bg-zinc-700 text-blue-600 dark:text-blue-300 px-1.5 py-0.5 rounded text-[11px] font-mono">
@@ -144,7 +146,42 @@ function renderContent(content) {
       return part;
     });
 
-  return content.split('\n').map((line, i) => {
+  // Handle triple-backtick code blocks first
+  const lines = content.split('\n');
+  const result = [];
+  let i = 0;
+  while (i < lines.length) {
+    const trimmed = lines[i].trim();
+    if (trimmed.startsWith('```')) {
+      const lang = trimmed.slice(3).trim();
+      const codeLines = [];
+      i++;
+      while (i < lines.length && !lines[i].trim().startsWith('```')) {
+        codeLines.push(lines[i]);
+        i++;
+      }
+      result.push(
+        <div key={`code-${i}`} className="my-3 rounded-xl overflow-hidden border border-slate-200 dark:border-zinc-700">
+          {lang && (
+            <div className="px-4 py-1.5 bg-slate-200 dark:bg-zinc-700 text-[11px] font-mono font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+              {lang}
+            </div>
+          )}
+          <pre className="bg-slate-100 dark:bg-zinc-800 px-4 py-3 text-xs font-mono text-slate-800 dark:text-slate-200 overflow-x-auto whitespace-pre">
+            {codeLines.join('\n')}
+          </pre>
+        </div>
+      );
+      i++; // skip closing ```
+      continue;
+    }
+    result.push({ line: lines[i], idx: i });
+    i++;
+  }
+
+  return result.map((item) => {
+    if (!item || item.line === undefined) return item; // already a React element
+    const { line, idx: i } = item;
     const trimmed = line.trim();
 
     // ── IMAGE marker: [IMAGE||url||title] ──────────────────────────────────
@@ -179,8 +216,36 @@ function renderContent(content) {
       return <VideoLink key={i} searchUrl={url} videoTitle={title} />;
     }
 
-    if (!trimmed) return <div key={i} className="h-1.5" />;
+    if (!trimmed) return <div key={i} className="h-2" />;
 
+    // ── Headings: ###, ##, # ──────────────────────────────────────────────────
+    const h3 = trimmed.match(/^###\s+(.+)/);
+    if (h3) return (
+      <p key={i} className="text-sm font-bold text-slate-900 dark:text-white mt-3 mb-0.5">
+        {formatInline(h3[1])}
+      </p>
+    );
+
+    const h2 = trimmed.match(/^##\s+(.+)/);
+    if (h2) return (
+      <p key={i} className="text-[15px] font-bold text-slate-900 dark:text-white mt-4 mb-0.5 border-b border-slate-100 dark:border-zinc-800 pb-1">
+        {formatInline(h2[1])}
+      </p>
+    );
+
+    const h1 = trimmed.match(/^#\s+(.+)/);
+    if (h1) return (
+      <p key={i} className="text-base font-extrabold text-slate-900 dark:text-white mt-4 mb-1">
+        {formatInline(h1[1])}
+      </p>
+    );
+
+    // ── Horizontal rule ───────────────────────────────────────────────────────
+    if (trimmed === '---' || trimmed === '***') {
+      return <hr key={i} className="border-slate-200 dark:border-zinc-700 my-2" />;
+    }
+
+    // ── Code block (single-line backtick) ─────────────────────────────────────
     if (trimmed.startsWith('`') && trimmed.endsWith('`') && trimmed.length > 2) {
       return (
         <div key={i} className="my-2">
@@ -191,7 +256,8 @@ function renderContent(content) {
       );
     }
 
-    if (trimmed.startsWith('- ')) {
+    // ── Bullet ────────────────────────────────────────────────────────────────
+    if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
       return (
         <div key={i} className="flex gap-2 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
           <span className="text-blue-400 flex-shrink-0 mt-0.5 select-none">•</span>
@@ -200,12 +266,24 @@ function renderContent(content) {
       );
     }
 
+    // ── Numbered list ─────────────────────────────────────────────────────────
     const numMatch = trimmed.match(/^(\d+)\.\s(.+)/);
     if (numMatch) {
       return (
         <div key={i} className="flex gap-2 text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
           <span className="text-blue-500 font-semibold flex-shrink-0 w-5">{numMatch[1]}.</span>
           <span>{formatInline(numMatch[2])}</span>
+        </div>
+      );
+    }
+
+    // ── Blockquote ────────────────────────────────────────────────────────────
+    if (trimmed.startsWith('> ')) {
+      return (
+        <div key={i} className="border-l-4 border-blue-400 pl-3 my-1">
+          <p className="text-sm text-slate-600 dark:text-slate-400 italic leading-relaxed">
+            {formatInline(trimmed.slice(2))}
+          </p>
         </div>
       );
     }
