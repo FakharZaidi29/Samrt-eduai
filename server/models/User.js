@@ -39,6 +39,7 @@ const userSchema = new mongoose.Schema(
     settings: {
       darkMode: { type: Boolean, default: false },
       language: { type: String, default: 'English' },
+      educationLevel: { type: String, default: 'Matric (9-10)' },
       emailNotifications: { type: Boolean, default: true },
       pushNotifications: { type: Boolean, default: false },
       studyReminders: { type: Boolean, default: true },

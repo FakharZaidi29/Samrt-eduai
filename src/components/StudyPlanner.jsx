@@ -20,6 +20,7 @@ import {
   StickyNote,
   Copy,
   Check,
+  Download,
 } from 'lucide-react';
 import { api } from '../services/api.js';
 
@@ -149,6 +150,18 @@ Keep it student-friendly, clear, and comprehensive. About 300-400 words.`;
     });
   };
 
+  const handleDownloadNotes = () => {
+    if (!notes) return;
+    const content = `${module.title}\n${'='.repeat(module.title.length)}\n\nTopics: ${(module.topics || []).join(', ')}\n\n${notes}`;
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${module.title.replace(/[^a-z0-9]/gi, '_')}_notes.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className={`border rounded-2xl transition-all duration-200 ${s.cardBg} ${module.status === 'in-progress' ? 'shadow-sm' : ''}`}>
       <div className="flex items-center gap-4 p-4 cursor-pointer select-none" onClick={() => setExpanded(v => !v)}>
@@ -224,11 +237,17 @@ Keep it student-friendly, clear, and comprehensive. About 300-400 words.`;
               </p>
               <div className="flex items-center gap-2">
                 {notes && (
-                  <button onClick={handleCopyNotes}
-                    className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
-                    {copied ? <Check size={11} className="text-emerald-500" /> : <Copy size={11} />}
-                    {copied ? 'Copied!' : 'Copy'}
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <button onClick={handleCopyNotes}
+                      className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors">
+                      {copied ? <Check size={11} className="text-emerald-500" /> : <Copy size={11} />}
+                      {copied ? 'Copied!' : 'Copy'}
+                    </button>
+                    <button onClick={handleDownloadNotes}
+                      className="flex items-center gap-1 text-[11px] text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                      <Download size={11} /> Download
+                    </button>
+                  </div>
                 )}
                 <button
                   onClick={handleGenerateNotes}

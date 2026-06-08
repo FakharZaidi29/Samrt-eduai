@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Trophy, Brain, Send, Loader2, CheckCircle2, XCircle, Star, ArrowRight, RotateCcw, Zap } from 'lucide-react';
+import { Trophy, Brain, Send, Loader2, CheckCircle2, XCircle, Star, ArrowRight, RotateCcw, Zap, BarChart3 } from 'lucide-react';
 import { api } from '../services/api.js';
+import Leaderboard from './Leaderboard.jsx';
 
 const SUBJECTS = [
   { id: 'math', label: 'Mathematics', emoji: '📐' },
@@ -22,7 +23,7 @@ const LEVELS = [
 ];
 
 export default function CompetitionMode() {
-  const [phase, setPhase] = useState('setup'); // setup | quiz | result
+  const [phase, setPhase] = useState('setup'); // setup | quiz | result | leaderboard
   const [subject, setSubject] = useState('');
   const [level, setLevel] = useState('matric');
   const [sessionId, setSessionId] = useState(null);
@@ -104,11 +105,19 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
         explanation: explainMatch?.[1]?.trim() || text,
       };
       const newResults = [...results, result];
+      const newScore = score + marks;
       setResults(newResults);
-      setScore(s => s + marks);
+      setScore(newScore);
       setAnswer('');
       if (current + 1 >= questions.length) {
         setPhase('result');
+        // Save to leaderboard
+        const total = questions.length * 10;
+        const pctFinal = Math.round((newScore / total) * 100);
+        const gradeFinal = pctFinal >= 90 ? 'A+' : pctFinal >= 80 ? 'A' : pctFinal >= 70 ? 'B' : pctFinal >= 60 ? 'C' : 'D';
+        const subLabel = SUBJECTS.find(s => s.id === subject)?.label || subject;
+        const lvlLabel = LEVELS.find(l => l.id === level)?.label || level;
+        api.quiz.saveResult({ subject: subLabel, level: lvlLabel, score: newScore, totalMarks: total, percentage: pctFinal, grade: gradeFinal }).catch(() => {});
       } else {
         setCurrent(c => c + 1);
       }
@@ -268,11 +277,22 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
           ))}
         </div>
 
-        <button onClick={reset}
-          className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2 shadow-md">
-          <RotateCcw size={16} /> Try Another Quiz
-        </button>
+        <div className="flex gap-3">
+          <button onClick={reset}
+            className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2 shadow-md">
+            <RotateCcw size={16} /> Try Again
+          </button>
+          <button onClick={() => setPhase('leaderboard')}
+            className="flex-1 py-3 bg-amber-500 hover:bg-amber-400 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2 shadow-md">
+            <BarChart3 size={16} /> Leaderboard
+          </button>
+        </div>
       </div>
     </div>
   );
+
+  // Leaderboard screen
+  if (phase === 'leaderboard') {
+    return <Leaderboard onBack={() => setPhase('result')} onNewQuiz={reset} />;
+  }
 }

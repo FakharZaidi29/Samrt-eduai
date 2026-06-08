@@ -7,6 +7,7 @@ import authRoutes from './routes/auth.js';
 import chatRoutes from './routes/chat.js';
 import plannerRoutes from './routes/planner.js';
 import analyticsRoutes from './routes/analytics.js';
+import quizRoutes from './routes/quiz.js';
 import User from './models/User.js';
 import StudyPlan from './models/StudyPlan.js';
 import ChatSession from './models/ChatSession.js';
@@ -42,6 +43,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/planner', plannerRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/quiz', quizRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

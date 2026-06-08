@@ -110,11 +110,12 @@ router.put('/settings', protect, async (req, res) => {
     const user = await User.findById(req.user._id);
 
     // Update allowed fields
-    const { name, language, darkMode, emailNotifications, pushNotifications,
+    const { name, language, educationLevel, darkMode, emailNotifications, pushNotifications,
       studyReminders, weeklyReport, aiModel, autoSaveNotes, soundEffects } = req.body;
 
     if (name !== undefined) user.name = name;
     if (language !== undefined) user.settings.language = language;
+    if (educationLevel !== undefined) user.settings.educationLevel = educationLevel;
     if (darkMode !== undefined) user.settings.darkMode = darkMode;
     if (emailNotifications !== undefined) user.settings.emailNotifications = emailNotifications;
     if (pushNotifications !== undefined) user.settings.pushNotifications = pushNotifications;

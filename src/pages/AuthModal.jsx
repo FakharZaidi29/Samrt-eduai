@@ -2,6 +2,17 @@ import { useState } from 'react';
 import { Sparkles, Eye, EyeOff, Loader2, Zap, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
 
+function GoogleIcon() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6-6C34.6 5.1 29.6 3 24 3 12.4 3 3 12.4 3 24s9.4 21 21 21c10.5 0 20-7.5 20-21 0-1.3-.2-2.7-.5-4z" fill="#FFC107"/>
+      <path d="M6.3 14.7l7 5.1C15.1 16 19.2 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6-6C34.6 5.1 29.6 3 24 3 16.3 3 9.7 7.9 6.3 14.7z" fill="#FF3D00"/>
+      <path d="M24 45c5.5 0 10.4-1.9 14.2-5.1l-6.6-5.5C29.5 36.2 26.9 37 24 37c-6.1 0-10.7-3.1-11.8-7.5l-7 5.4C8.5 41.3 15.7 45 24 45z" fill="#4CAF50"/>
+      <path d="M44.5 20H24v8.5h11.8c-.6 2.5-2 4.7-4 6.3l6.6 5.5C42.1 37 45 31 45 24c0-1.3-.2-2.7-.5-4z" fill="#1976D2"/>
+    </svg>
+  );
+}
+
 const DEMO_EMAIL = 'demo@eduai.com';
 const DEMO_PASSWORD = 'demo123';
 
@@ -14,6 +25,7 @@ export default function AuthModal({ onClose }) {
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [googleMsg, setGoogleMsg] = useState(false);
 
   const handleDemo = async () => {
     setError('');
@@ -69,11 +81,25 @@ export default function AuthModal({ onClose }) {
         <button
           onClick={handleDemo}
           disabled={loading}
-          className="w-full flex items-center justify-center gap-2 mb-4 py-3 bg-white/10 hover:bg-white/15 border border-white/20 text-white text-sm font-semibold rounded-2xl transition-all backdrop-blur-sm disabled:opacity-60"
+          className="w-full flex items-center justify-center gap-2 mb-3 py-3 bg-white/10 hover:bg-white/15 border border-white/20 text-white text-sm font-semibold rounded-2xl transition-all backdrop-blur-sm disabled:opacity-60"
         >
           <Zap size={15} className="text-yellow-400" />
           Try Demo Account — instant access
         </button>
+
+        {/* Google Sign-in */}
+        <button
+          onClick={() => setGoogleMsg(true)}
+          className="w-full flex items-center justify-center gap-2 mb-3 py-3 bg-white hover:bg-slate-100 border border-slate-200 text-slate-800 text-sm font-semibold rounded-2xl transition-all"
+        >
+          <GoogleIcon />
+          Continue with Google
+        </button>
+        {googleMsg && (
+          <p className="text-center text-xs text-amber-400 mb-3 animate-fadeIn">
+            Google Sign-in coming soon — use email or demo account for now!
+          </p>
+        )}
 
         <div className="flex items-center gap-3 mb-4">
           <div className="flex-1 h-px bg-slate-700" />

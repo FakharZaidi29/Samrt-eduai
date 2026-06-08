@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext.jsx';
+import { useNotifications } from './hooks/useNotifications.js';
+import { useOffline } from './hooks/useOffline.js';
 import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import ChatInterface from './components/ChatInterface';
@@ -9,9 +11,10 @@ import Settings from './components/Settings';
 import CompetitionMode from './components/CompetitionMode.jsx';
 import PracticeQuestions from './components/PracticeQuestions.jsx';
 import Pricing from './components/Pricing.jsx';
+import Leaderboard from './components/Leaderboard.jsx';
 import LandingPage from './pages/LandingPage.jsx';
 import AuthModal from './pages/AuthModal.jsx';
-import { Loader2 } from 'lucide-react';
+import { Loader2, WifiOff } from 'lucide-react';
 
 function AppInner() {
   const { user, loading } = useAuth();
@@ -19,6 +22,17 @@ function AppInner() {
   const [darkMode, setDarkMode] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [chatTopic, setChatTopic] = useState(null);
+  const offline = useOffline();
+  const { send: sendNotif } = useNotifications(user);
+
+  // Daily streak reminder — fires once per session after 2 min if user hasn't chatted
+  useEffect(() => {
+    if (!user) return;
+    const timer = setTimeout(() => {
+      sendNotif('📚 Time to Study!', `Hey ${user.name?.split(' ')[0] || 'there'}, keep your streak going — open EduAI and learn something new today!`);
+    }, 2 * 60 * 1000);
+    return () => clearTimeout(timer);
+  }, [user]);
 
   const goToChat = (topic = null) => {
     setChatTopic(topic);
@@ -49,22 +63,32 @@ function AppInner() {
   }
 
   return (
-    <div className={`${darkMode ? 'dark' : ''} h-screen`}>
-      <Layout
-        activeView={activeView}
-        setActiveView={setActiveView}
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
-      >
-        {activeView === 'dashboard' && <Dashboard setActiveView={setActiveView} goToChat={goToChat} />}
-        {activeView === 'chat' && <ChatInterface initialTopic={chatTopic} onTopicConsumed={() => setChatTopic(null)} />}
-        {activeView === 'planner' && <StudyPlanner setActiveView={setActiveView} />}
-        {activeView === 'analytics' && <Analytics />}
-        {activeView === 'settings' && <Settings darkMode={darkMode} setDarkMode={setDarkMode} />}
-        {activeView === 'competition' && <CompetitionMode />}
-        {activeView === 'practice' && <PracticeQuestions />}
-        {activeView === 'pricing' && <Pricing setActiveView={setActiveView} />}
-      </Layout>
+    <div className={`${darkMode ? 'dark' : ''} h-screen flex flex-col`}>
+      {/* Offline banner */}
+      {offline && (
+        <div className="flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium z-50 flex-shrink-0">
+          <WifiOff size={15} />
+          <span>No internet connection — some features may not work</span>
+        </div>
+      )}
+      <div className="flex-1 min-h-0">
+        <Layout
+          activeView={activeView}
+          setActiveView={setActiveView}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+        >
+          {activeView === 'dashboard' && <Dashboard setActiveView={setActiveView} goToChat={goToChat} />}
+          {activeView === 'chat' && <ChatInterface initialTopic={chatTopic} onTopicConsumed={() => setChatTopic(null)} />}
+          {activeView === 'planner' && <StudyPlanner setActiveView={setActiveView} />}
+          {activeView === 'analytics' && <Analytics />}
+          {activeView === 'settings' && <Settings darkMode={darkMode} setDarkMode={setDarkMode} />}
+          {activeView === 'competition' && <CompetitionMode />}
+          {activeView === 'practice' && <PracticeQuestions />}
+          {activeView === 'pricing' && <Pricing setActiveView={setActiveView} />}
+          {activeView === 'leaderboard' && <Leaderboard />}
+        </Layout>
+      </div>
     </div>
   );
 }

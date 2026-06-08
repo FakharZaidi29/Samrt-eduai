@@ -61,6 +61,13 @@ export const api = {
     getStats: () => request('GET', '/analytics/stats'),
     logSession: (hours) => request('POST', '/analytics/log-session', { hours }),
   },
+
+  // ─── Quiz / Leaderboard ────────────────────────────────────────────────────
+  quiz: {
+    saveResult: (data) => request('POST', '/quiz/result', data),
+    getLeaderboard: (subject) => request('GET', `/quiz/leaderboard${subject ? `?subject=${subject}` : ''}`),
+    getMyResults: () => request('GET', '/quiz/my-results'),
+  },
 };
 
 export default api;

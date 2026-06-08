@@ -27,6 +27,7 @@ const NAV_ITEMS = [
   { id: 'planner', label: 'Study Planner', icon: BookOpen },
   { id: 'competition', label: 'Challenge Mode', icon: Trophy, badge: 'NEW' },
   { id: 'practice', label: 'Practice Questions', icon: PenTool },
+  { id: 'leaderboard', label: 'Leaderboard', icon: BarChart3 },
 ];
 
 const BOTTOM_NAV = [
