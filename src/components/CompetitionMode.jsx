@@ -119,7 +119,7 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
         const gradeFinal = pctFinal >= 90 ? 'A+' : pctFinal >= 80 ? 'A' : pctFinal >= 70 ? 'B' : pctFinal >= 60 ? 'C' : 'D';
         const subLabel = SUBJECTS.find(s => s.id === subject)?.label || subject;
         const lvlLabel = LEVELS.find(l => l.id === level)?.label || level;
-        api.quiz.saveResult({ subject: subLabel, level: lvlLabel, score: newScore, totalMarks: total, percentage: pctFinal, grade: gradeFinal }).catch(() => {});
+        api.quiz.saveResult({ subject: subLabel, level: lvlLabel, score: newScore, totalMarks: total, percentage: pctFinal, grade: gradeFinal }).catch((err) => console.error('Save result failed:', err.message));
       } else {
         setCurrent(c => c + 1);
       }
@@ -252,6 +252,11 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
     );
   }
 
+  // Leaderboard screen
+  if (phase === 'leaderboard') {
+    return <Leaderboard onBack={() => setPhase('result')} onNewQuiz={reset} />;
+  }
+
   const g = getGrade();
   return (
     <div className="h-full overflow-y-auto">
@@ -292,9 +297,4 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
       </div>
     </div>
   );
-
-  // Leaderboard screen
-  if (phase === 'leaderboard') {
-    return <Leaderboard onBack={() => setPhase('result')} onNewQuiz={reset} />;
-  }
 }
