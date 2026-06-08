@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Sparkles, Eye, EyeOff, Loader2, Zap, X } from 'lucide-react';
+import { Sparkles, Eye, EyeOff, Loader2, Zap, X, CheckCircle2, Mail } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
+import { api } from '../services/api.js';
 
 function GoogleIcon() {
   return (
@@ -26,6 +27,24 @@ export default function AuthModal({ onClose }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [googleMsg, setGoogleMsg] = useState(false);
+  const [forgotMode, setForgotMode] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotSent, setForgotSent] = useState(false);
+
+  const handleForgot = async (e) => {
+    e.preventDefault();
+    if (!forgotEmail.trim()) { setError('Please enter your email address'); return; }
+    setError('');
+    setLoading(true);
+    try {
+      await api.auth.forgotPassword(forgotEmail.trim());
+      setForgotSent(true);
+    } catch (err) {
+      setError(err.message || 'Failed to send reset email. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleDemo = async () => {
     setError('');
@@ -54,6 +73,58 @@ export default function AuthModal({ onClose }) {
       setLoading(false);
     }
   };
+
+  if (forgotMode) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+        <div className="relative w-full max-w-sm animate-[fadeIn_0.15s_ease-out]">
+          {onClose && (
+            <button onClick={onClose} className="absolute -top-10 right-0 p-2 rounded-xl text-white/60 hover:text-white transition-colors">
+              <X size={20} />
+            </button>
+          )}
+          <div className="flex flex-col items-center mb-6">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-900/50 mb-4">
+              <Mail size={26} className="text-white" />
+            </div>
+            <h1 className="text-xl font-bold text-white">Forgot Password?</h1>
+            <p className="text-sm text-slate-400 mt-1">We'll send a reset link to your email</p>
+          </div>
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-6 shadow-2xl">
+            {forgotSent ? (
+              <div className="text-center py-4">
+                <CheckCircle2 size={40} className="text-emerald-400 mx-auto mb-3" />
+                <p className="text-white font-semibold mb-1">Email sent!</p>
+                <p className="text-sm text-slate-400 mb-4">Check your inbox and click the reset link. It expires in 1 hour.</p>
+                <button onClick={() => { setForgotMode(false); setForgotSent(false); }} className="text-blue-400 hover:text-blue-300 text-sm font-semibold">
+                  ← Back to Sign In
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleForgot} className="space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">Your Email</label>
+                  <input
+                    type="email" value={forgotEmail} onChange={(e) => setForgotEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="w-full px-4 py-2.5 bg-slate-800 border border-slate-600 rounded-xl text-sm text-white placeholder-slate-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-900/40 transition-all"
+                  />
+                </div>
+                {error && <div className="px-4 py-3 bg-red-900/30 border border-red-800/50 rounded-xl"><p className="text-sm text-red-400">{error}</p></div>}
+                <button type="submit" disabled={loading}
+                  className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white text-sm font-semibold rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-60">
+                  {loading ? <><Loader2 size={16} className="animate-spin" />Sending…</> : 'Send Reset Link'}
+                </button>
+                <button type="button" onClick={() => { setForgotMode(false); setError(''); }} className="w-full text-sm text-slate-400 hover:text-white transition-colors">
+                  ← Back to Sign In
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
@@ -174,7 +245,7 @@ export default function AuthModal({ onClose }) {
             </button>
           </form>
 
-          <div className="mt-4 text-center">
+          <div className="mt-4 space-y-2 text-center">
             <p className="text-sm text-slate-400">
               {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}{' '}
               <button onClick={() => { setMode(m => m === 'login' ? 'register' : 'login'); setError(''); }}
@@ -182,6 +253,12 @@ export default function AuthModal({ onClose }) {
                 {mode === 'login' ? 'Sign up' : 'Sign in'}
               </button>
             </p>
+            {mode === 'login' && (
+              <button onClick={() => { setForgotMode(true); setError(''); setForgotEmail(email); }}
+                className="text-xs text-slate-500 hover:text-slate-300 transition-colors">
+                Forgot password?
+              </button>
+            )}
           </div>
         </div>
       </div>

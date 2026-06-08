@@ -20,20 +20,23 @@ import {
   X,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useLanguage } from '../context/LanguageContext.jsx';
+
+const URDU_FONT_CLASS = 'font-[Noto_Naskh_Arabic,serif]';
 
 const NAV_ITEMS = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  { id: 'chat', label: 'AI Tutor', icon: MessageSquare, badge: 'AI' },
-  { id: 'planner', label: 'Study Planner', icon: BookOpen },
-  { id: 'competition', label: 'Challenge Mode', icon: Trophy, badge: 'NEW' },
-  { id: 'practice', label: 'Practice Questions', icon: PenTool },
-  { id: 'leaderboard', label: 'Leaderboard', icon: BarChart3 },
+  { id: 'dashboard', labelKey: 'dashboard', icon: LayoutDashboard },
+  { id: 'chat', labelKey: 'aiTutor', icon: MessageSquare, badge: 'AI' },
+  { id: 'planner', labelKey: 'studyPlanner', icon: BookOpen },
+  { id: 'competition', labelKey: 'challengeMode', icon: Trophy, badge: 'NEW' },
+  { id: 'practice', labelKey: 'practiceQuestions', icon: PenTool },
+  { id: 'leaderboard', labelKey: 'leaderboard', icon: BarChart3 },
 ];
 
 const BOTTOM_NAV = [
-  { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-  { id: 'pricing', label: 'Upgrade Plan', icon: CreditCard },
-  { id: 'settings', label: 'Settings', icon: Settings },
+  { id: 'analytics', labelKey: 'analytics', icon: BarChart3 },
+  { id: 'pricing', labelKey: 'upgradePlan', icon: CreditCard },
+  { id: 'settings', labelKey: 'settings', icon: Settings },
 ];
 
 function getInitials(name) {
@@ -183,6 +186,7 @@ function NotificationsPanel({ user, onClose, setActiveView }) {
 
 export default function Sidebar({ activeView, setActiveView, darkMode, setDarkMode }) {
   const { user, logout } = useAuth();
+  const { lang, setLang, t } = useLanguage();
   const [notifOpen, setNotifOpen] = useState(false);
   const notifRef = useRef(null);
 
@@ -237,13 +241,13 @@ export default function Sidebar({ activeView, setActiveView, darkMode, setDarkMo
       <nav className="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
         <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-600 px-3 pb-2 uppercase tracking-widest">Learning</p>
         {NAV_ITEMS.map((item) => (
-          <NavItem key={item.id} item={item} isActive={activeView === item.id} onClick={setActiveView} />
+          <NavItem key={item.id} item={{ ...item, label: t(item.labelKey) }} isActive={activeView === item.id} onClick={setActiveView} />
         ))}
 
         <div className="pt-5">
           <p className="text-[10px] font-semibold text-slate-400 dark:text-slate-600 px-3 pb-2 uppercase tracking-widest">Account</p>
           {BOTTOM_NAV.map((item) => (
-            <NavItem key={item.id} item={item} isActive={activeView === item.id} onClick={setActiveView} />
+            <NavItem key={item.id} item={{ ...item, label: t(item.labelKey) }} isActive={activeView === item.id} onClick={setActiveView} />
           ))}
         </div>
       </nav>
@@ -255,10 +259,19 @@ export default function Sidebar({ activeView, setActiveView, darkMode, setDarkMo
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-800 hover:text-slate-900 dark:hover:text-white transition-all duration-200"
         >
           {darkMode ? <Sun size={17} className="flex-shrink-0" /> : <Moon size={17} className="flex-shrink-0" />}
-          <span className="flex-1 text-left">{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
+          <span className="flex-1 text-left">{darkMode ? t('lightMode') : t('darkMode')}</span>
           <div className={`w-9 h-5 rounded-full transition-colors duration-300 flex items-center px-0.5 flex-shrink-0 ${darkMode ? 'bg-blue-600' : 'bg-slate-200 dark:bg-zinc-700'}`}>
             <div className={`w-4 h-4 rounded-full bg-white shadow-sm transform transition-transform duration-300 ${darkMode ? 'translate-x-4' : 'translate-x-0'}`} />
           </div>
+        </button>
+
+        {/* Language toggle */}
+        <button
+          onClick={() => setLang(lang === 'en' ? 'ur' : 'en')}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-zinc-800 hover:text-slate-900 dark:hover:text-white transition-all duration-200"
+        >
+          <span className="text-base flex-shrink-0">{lang === 'en' ? '🇵🇰' : '🇬🇧'}</span>
+          <span className="flex-1 text-left">{lang === 'en' ? 'اردو میں بدلیں' : 'Switch to English'}</span>
         </button>
 
         <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl">

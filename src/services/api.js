@@ -32,6 +32,8 @@ export const api = {
     register: (name, email, password) => request('POST', '/auth/register', { name, email, password }),
     me: () => request('GET', '/auth/me'),
     updateSettings: (settings) => request('PUT', '/auth/settings', settings),
+    forgotPassword: (email) => request('POST', '/auth/forgot-password', { email }),
+    resetPassword: (token, password) => request('POST', `/auth/reset-password/${token}`, { password }),
   },
 
   // ─── Chat ──────────────────────────────────────────────────────────────────

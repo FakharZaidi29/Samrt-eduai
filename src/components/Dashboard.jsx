@@ -16,7 +16,19 @@ import {
   Flame,
   BookOpen,
   Loader2,
+  GraduationCap,
+  Users,
+  Code2,
 } from 'lucide-react';
+
+const TEAM = [
+  { name: 'Ahsan Ali', role: 'Lead Developer', emoji: '💻', color: 'from-blue-500 to-blue-700' },
+  { name: 'Muskan', role: 'UI/UX Designer', emoji: '🎨', color: 'from-pink-500 to-rose-600' },
+  { name: 'Faryal', role: 'Frontend Developer', emoji: '⚡', color: 'from-violet-500 to-purple-600' },
+  { name: 'Muniba', role: 'Content Strategist', emoji: '✍️', color: 'from-emerald-500 to-teal-600' },
+  { name: 'Arifa', role: 'Research Lead', emoji: '🔬', color: 'from-amber-500 to-orange-500' },
+  { name: 'Sajjadullah', role: 'Backend Developer', emoji: '🛠️', color: 'from-cyan-500 to-blue-600' },
+];
 import { useAuth } from '../context/AuthContext.jsx';
 import { api } from '../services/api.js';
 
@@ -395,6 +407,41 @@ export default function Dashboard({ setActiveView, goToChat }) {
               </button>
             );
           })}
+        </div>
+
+        {/* About Us */}
+        <div className="bg-gradient-to-br from-blue-50 to-violet-50 dark:from-blue-900/10 dark:to-violet-900/10 rounded-2xl border border-blue-100 dark:border-blue-900/30 p-6">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-600 to-violet-600 flex items-center justify-center shadow-sm">
+              <GraduationCap size={17} className="text-white" />
+            </div>
+            <div>
+              <h2 className="font-bold text-slate-900 dark:text-white text-sm">About Us</h2>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400">University of Lahore — 4th Semester Project 🇵🇰</p>
+            </div>
+          </div>
+          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed mb-5">
+            EduAI is a semester project built by passionate Computer Science students at the
+            <span className="font-semibold text-blue-600 dark:text-blue-400"> University of Lahore</span>.
+            Our mission: make quality AI-powered education accessible to every Pakistani student — from Class 1 all the way to PhD.
+          </p>
+          <div className="flex items-center gap-1.5 mb-4">
+            <Users size={13} className="text-slate-400" />
+            <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Meet the Team</span>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
+            {TEAM.map((member) => (
+              <div key={member.name} className="flex flex-col items-center gap-2 p-3 bg-white dark:bg-zinc-900 rounded-xl border border-slate-100 dark:border-zinc-800 text-center hover:shadow-sm transition-shadow">
+                <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${member.color} flex items-center justify-center text-lg shadow-sm`}>
+                  {member.emoji}
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-900 dark:text-white leading-tight">{member.name}</p>
+                  <p className="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 leading-tight">{member.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
       </div>

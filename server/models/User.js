@@ -42,7 +42,7 @@ const userSchema = new mongoose.Schema(
     },
     settings: {
       darkMode: { type: Boolean, default: false },
-      language: { type: String, default: 'English' },
+      language: { type: String, default: 'en' },
       educationLevel: { type: String, default: 'Matric (9-10)' },
       emailNotifications: { type: Boolean, default: true },
       pushNotifications: { type: Boolean, default: false },
@@ -52,6 +52,8 @@ const userSchema = new mongoose.Schema(
       autoSaveNotes: { type: Boolean, default: true },
       soundEffects: { type: Boolean, default: false },
     },
+    resetToken: { type: String, default: null },
+    resetTokenExpiry: { type: Date, default: null },
   },
   { timestamps: true }
 );

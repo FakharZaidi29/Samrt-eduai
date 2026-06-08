@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext.jsx';
+import { LanguageProvider } from './context/LanguageContext.jsx';
 import { useNotifications } from './hooks/useNotifications.js';
 import { useOffline } from './hooks/useOffline.js';
 import Layout from './components/Layout';
@@ -14,11 +15,18 @@ import Pricing from './components/Pricing.jsx';
 import Leaderboard from './components/Leaderboard.jsx';
 import LandingPage from './pages/LandingPage.jsx';
 import AuthModal from './pages/AuthModal.jsx';
+import ResetPassword from './pages/ResetPassword.jsx';
 import { Loader2, WifiOff } from 'lucide-react';
 
 function AppInner() {
   const { user, loading } = useAuth();
   const [activeView, setActiveView] = useState('dashboard');
+
+  // Handle /reset-password/:token URL
+  const resetMatch = window.location.pathname.match(/^\/reset-password\/([a-f0-9]{64})$/);
+  if (resetMatch) {
+    return <ResetPassword token={resetMatch[1]} onDone={() => window.history.replaceState({}, '', '/')} />;
+  }
   const [darkMode, setDarkMode] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
   const [chatTopic, setChatTopic] = useState(null);
@@ -95,8 +103,10 @@ function AppInner() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <AppInner />
-    </AuthProvider>
+    <LanguageProvider>
+      <AuthProvider>
+        <AppInner />
+      </AuthProvider>
+    </LanguageProvider>
   );
 }

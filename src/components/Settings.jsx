@@ -7,9 +7,37 @@ import {
   Zap,
   Check,
   Loader2,
+  HeadphonesIcon,
+  MessageSquare,
+  Mail,
+  ExternalLink,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useLanguage } from '../context/LanguageContext.jsx';
 import { api } from '../services/api.js';
+
+const FAQS = [
+  { q: 'How many AI credits do I get per day?', a: 'Free plan includes 500 lifetime credits. Upgrade to Basic for 2,000/month or Premium for unlimited usage.' },
+  { q: 'Can I use EduAI for board exam preparation?', a: 'Yes! EduAI is designed for Pakistani board exams — Matric, FSc, and more. Just tell the AI your level and it adjusts automatically.' },
+  { q: 'How does the streak system work?', a: 'Open any AI chat session each day to maintain your streak. Missing a day resets it to 1.' },
+  { q: 'Can I download my study notes?', a: 'Yes! Open any module in the Study Planner, generate notes, then click the Download button to save as a .txt file.' },
+  { q: 'Is my data safe?', a: 'All your data is stored securely on MongoDB Atlas with encrypted connections. We never share your data with third parties.' },
+];
+
+function FaqItem({ q, a }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="border-b border-slate-100 dark:border-zinc-800 last:border-0">
+      <button onClick={() => setOpen(v => !v)} className="w-full flex items-center justify-between gap-3 py-3.5 text-left">
+        <span className="text-sm font-medium text-slate-800 dark:text-slate-200">{q}</span>
+        {open ? <ChevronUp size={14} className="text-slate-400 flex-shrink-0" /> : <ChevronDown size={14} className="text-slate-400 flex-shrink-0" />}
+      </button>
+      {open && <p className="text-xs text-slate-500 dark:text-slate-400 pb-3.5 leading-relaxed">{a}</p>}
+    </div>
+  );
+}
 
 function ToggleSwitch({ enabled, onChange }) {
   return (
@@ -57,10 +85,11 @@ function SectionCard({ title, icon: Icon, children }) {
 
 export default function Settings({ darkMode, setDarkMode }) {
   const { user, updateUser } = useAuth();
+  const { lang, setLang } = useLanguage();
 
   const [name, setName] = useState(user?.name || '');
   const [eduLevel, setEduLevel] = useState(user?.settings?.educationLevel || 'Matric (9-10)');
-  const [language, setLanguage] = useState(user?.settings?.language || 'English');
+  const [language, setLanguage] = useState(user?.settings?.language || lang);
   const [notifs, setNotifs] = useState({
     email: user?.settings?.emailNotifications ?? true,
     push: user?.settings?.pushNotifications ?? false,
@@ -97,6 +126,7 @@ export default function Settings({ darkMode, setDarkMode }) {
         soundEffects: soundFx,
       });
       updateUser(updatedUser);
+      setLang(language); // sync language context immediately
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
     } catch (err) {
@@ -145,15 +175,14 @@ export default function Settings({ darkMode, setDarkMode }) {
               {['Class 1-5 (Primary)','Class 6-8 (Middle)','Matric (9-10)','FSc / FA (11-12)','BA / BS','Masters / MPhil','PhD','Teacher / Educator'].map(l => <option key={l}>{l}</option>)}
             </select>
           </SettingRow>
-          <SettingRow label="Language" description="App display language">
+          <SettingRow label="Language / زبان" description="App display language and AI response language">
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
               className="px-3 py-1.5 text-sm bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-slate-900 dark:text-white outline-none focus:border-blue-400 transition-colors cursor-pointer"
             >
-              {['English', 'Urdu', 'Arabic', 'French', 'Spanish'].map((l) => (
-                <option key={l}>{l}</option>
-              ))}
+              <option value="en">English</option>
+              <option value="ur">اردو (Urdu)</option>
             </select>
           </SettingRow>
         </SectionCard>
@@ -221,6 +250,52 @@ export default function Settings({ darkMode, setDarkMode }) {
           </SettingRow>
         </SectionCard>
 
+        {/* Support */}
+        <SectionCard title="Support" icon={HeadphonesIcon}>
+          <div className="px-5 py-4 space-y-3">
+            <p className="text-xs text-slate-500 dark:text-slate-400">Having trouble? Reach out to our team — we're here to help.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <a
+                href="mailto:support@eduai.pk"
+                className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-900/40 rounded-xl hover:shadow-sm transition-all group"
+              >
+                <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center flex-shrink-0">
+                  <Mail size={14} className="text-white" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-900 dark:text-white">Email Support</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">support@eduai.pk</p>
+                </div>
+                <ExternalLink size={12} className="ml-auto text-slate-300 group-hover:text-blue-400 transition-colors" />
+              </a>
+              <button
+                onClick={() => { window.open('https://wa.me/923001234567?text=Hi%20EduAI%20Support', '_blank'); }}
+                className="flex items-center gap-3 p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-900/40 rounded-xl hover:shadow-sm transition-all group text-left"
+              >
+                <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center flex-shrink-0">
+                  <MessageSquare size={14} className="text-white" />
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-slate-900 dark:text-white">WhatsApp</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Chat with us directly</p>
+                </div>
+                <ExternalLink size={12} className="ml-auto text-slate-300 group-hover:text-emerald-400 transition-colors" />
+              </button>
+            </div>
+
+            <div className="mt-4">
+              <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Frequently Asked Questions</p>
+              {FAQS.map((faq) => <FaqItem key={faq.q} q={faq.q} a={faq.a} />)}
+            </div>
+
+            <div className="mt-3 p-3 bg-slate-50 dark:bg-zinc-800 rounded-xl">
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 text-center">
+                🇵🇰 Built by students of <span className="font-semibold text-slate-700 dark:text-slate-300">University of Lahore</span> · 4th Semester
+              </p>
+            </div>
+          </div>
+        </SectionCard>
+
         {/* Save error */}
         {saveError && (
           <div className="px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border border-red-200 dark:border-red-900/40 rounded-xl">
@@ -241,7 +316,7 @@ export default function Settings({ darkMode, setDarkMode }) {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="w-full py-3 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm shadow-red-200/50 dark:shadow-red-900/30 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+          className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-xl transition-colors shadow-sm shadow-blue-200/50 dark:shadow-blue-900/30 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
         >
           {saving ? (
             <>

@@ -338,11 +338,13 @@ router.post('/sessions/:id/message', protect, async (req, res) => {
     const user = await User.findById(req.user._id);
     const aiModel = user.settings?.aiModel || 'claude-sonnet-4-6';
     const eduLevel = user.settings?.educationLevel || 'Matric (9-10)';
+    const userLang = user.settings?.language || 'en';
     const systemPrompt = `You are EduAI — a world-class AI tutor and expert assistant for ${user.name}.
 
 **STUDENT PROFILE:**
 - Name: ${user.name}
 - Education Level: ${eduLevel} (Pakistani curriculum)
+- Response Language: ${userLang === 'ur' ? 'URDU — You MUST respond entirely in Urdu (اردو). Use proper Urdu script. Keep technical/scientific terms in English but explain everything else in Urdu.' : 'English'}
 - Always pitch your explanations, vocabulary, and complexity to this level
 - For primary/middle levels: use simple words, fun examples, short sentences
 - For Matric/FSc: use proper academic language, board exam style
