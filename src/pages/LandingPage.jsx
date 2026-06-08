@@ -81,6 +81,7 @@ export default function LandingPage({ onGetStarted, onLogin }) {
             <Sparkles size={15} className="text-white" />
           </div>
           <span className="font-bold text-white text-lg">EduAI</span>
+          <span className="text-base hidden sm:inline" title="Pakistan">🇵🇰</span>
         </div>
         <div className="flex items-center gap-3">
           <button
@@ -315,14 +316,26 @@ export default function LandingPage({ onGetStarted, onLogin }) {
       </section>
 
       {/* ── Footer ──────────────────────────────────────────────────── */}
-      <footer className="border-t border-white/5 px-6 md:px-12 py-8 flex flex-col sm:flex-row items-center gap-3 justify-between">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
-            <Sparkles size={11} className="text-white" />
+      <footer className="border-t border-white/5 px-6 md:px-12 py-8">
+        <div className="flex flex-col sm:flex-row items-center gap-4 justify-between">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+              <Sparkles size={11} className="text-white" />
+            </div>
+            <span className="text-sm font-semibold text-white">EduAI</span>
           </div>
-          <span className="text-sm font-semibold text-white">EduAI</span>
+          <div className="flex items-center gap-2 text-xs text-slate-500">
+            <span>🇵🇰 Made in Pakistan</span>
+            <span className="text-slate-700">·</span>
+            <span>For Pakistani Students</span>
+            <span className="text-slate-700">·</span>
+            <span>© 2026 EduAI</span>
+          </div>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-green-900/20 border border-green-700/30 rounded-full">
+            <span className="text-base">🇵🇰</span>
+            <span className="text-xs text-green-400 font-medium">Pakistan's #1 AI Study Platform</span>
+          </div>
         </div>
-        <p className="text-xs text-slate-600">© 2026 EduAI. AI-powered learning platform.</p>
       </footer>
     </div>
   );

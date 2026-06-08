@@ -58,7 +58,7 @@ export default function Analytics() {
   ] : [];
 
   const summaryItems = stats ? [
-    { label: 'Study Plans', value: stats.totalPlans, icon: BookOpen, color: 'text-red-600 dark:text-red-400', bg: 'bg-red-50 dark:bg-red-900/20' },
+    { label: 'Study Plans', value: stats.totalPlans, icon: BookOpen, color: 'text-violet-600 dark:text-violet-400', bg: 'bg-violet-50 dark:bg-violet-900/20' },
     { label: 'AI Sessions', value: stats.totalChats, icon: Target, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-emerald-50 dark:bg-emerald-900/20' },
     { label: 'Day Streak', value: stats.streak, icon: TrendingUp, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-50 dark:bg-amber-900/20' },
     { label: 'Credits Remaining', value: stats.aiCreditsLimit - stats.aiCreditsUsed, icon: Zap, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-900/20' },
@@ -78,7 +78,7 @@ export default function Analytics() {
 
         {loading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 size={28} className="animate-spin text-red-500" />
+            <Loader2 size={28} className="animate-spin text-blue-500" />
           </div>
         ) : (
           <>
@@ -87,8 +87,8 @@ export default function Analytics() {
               {metrics.map((m) => (
                 <div key={m.label} className="bg-white dark:bg-zinc-900 rounded-2xl p-5 border border-slate-100 dark:border-zinc-800">
                   <div className="flex items-start justify-between mb-3">
-                    <div className="w-9 h-9 rounded-xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
-                      <m.icon size={17} className="text-red-600 dark:text-red-400" />
+                    <div className="w-9 h-9 rounded-xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
+                      <m.icon size={17} className="text-blue-600 dark:text-blue-400" />
                     </div>
                     <span className={`flex items-center gap-0.5 text-[11px] font-semibold px-2 py-0.5 rounded-lg ${
                       m.up
@@ -135,7 +135,7 @@ export default function Analytics() {
                 </div>
                 <div className="w-full h-3 bg-slate-100 dark:bg-zinc-800 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-red-600 to-red-800 rounded-full transition-all duration-700"
+                    className="h-full bg-gradient-to-r from-blue-500 to-blue-700 rounded-full transition-all duration-700"
                     style={{ width: `${Math.min((stats.aiCreditsUsed / stats.aiCreditsLimit) * 100, 100)}%` }}
                   />
                 </div>
@@ -151,7 +151,7 @@ export default function Analytics() {
                 <h2 className="font-semibold text-slate-900 dark:text-white text-sm mb-5">Overall Learning Progress</h2>
                 <div className="space-y-4">
                   {[
-                    { label: 'Study Plan Completion', value: stats.weeklyProgress, color: 'bg-red-600' },
+                    { label: 'Study Plan Completion', value: stats.weeklyProgress, color: 'bg-blue-600' },
                     {
                       label: 'AI Credits Used',
                       value: stats.aiCreditsLimit > 0 ? Math.round((stats.aiCreditsUsed / stats.aiCreditsLimit) * 100) : 0,
@@ -186,7 +186,7 @@ export default function Analytics() {
                 <h2 className="font-semibold text-slate-900 dark:text-white text-sm">Study Streak — June 2026</h2>
                 <div className="flex items-center gap-3 text-[11px] text-slate-400">
                   <span className="flex items-center gap-1">
-                    <span className="w-3 h-3 rounded-sm bg-red-600 inline-block" /> Studied
+                    <span className="w-3 h-3 rounded-sm bg-blue-600 inline-block" /> Studied
                   </span>
                   <span className="flex items-center gap-1">
                     <span className="w-3 h-3 rounded-sm bg-slate-100 dark:bg-zinc-800 inline-block" /> Missed
@@ -202,7 +202,7 @@ export default function Analytics() {
                       title={`June ${i + 1}`}
                       className={`aspect-square rounded-md text-[10px] flex items-center justify-center font-medium transition-colors ${
                         studied
-                          ? 'bg-red-600 text-white'
+                          ? 'bg-blue-600 text-white'
                           : 'bg-slate-100 dark:bg-zinc-800 text-slate-400 dark:text-zinc-600'
                       }`}
                     >

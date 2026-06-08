@@ -207,7 +207,10 @@ export default function Sidebar({ activeView, setActiveView, darkMode, setDarkMo
           <Sparkles size={17} className="text-white" />
         </div>
         <div>
-          <p className="font-bold text-slate-900 dark:text-white text-sm leading-none">EduAI</p>
+          <div className="flex items-center gap-1.5">
+            <p className="font-bold text-slate-900 dark:text-white text-sm leading-none">EduAI</p>
+            <span className="text-sm" title="Pakistan">🇵🇰</span>
+          </div>
           <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-0.5">Smart Learning Platform</p>
         </div>
 

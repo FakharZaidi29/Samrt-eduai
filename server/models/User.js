@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    lastStudyDate: {
+      type: Date,
+      default: null,
+    },
     totalStudyHours: {
       type: Number,
       default: 0,

@@ -403,6 +403,19 @@ Remember: ${user.name} deserves the BEST possible explanation. Be their personal
 
     session.messages.push({ role: 'assistant', content: aiContent });
     user.aiCreditsUsed = (user.aiCreditsUsed || 0) + 1;
+
+    // Update streak: increment if last study was yesterday or today, reset if missed a day
+    const now = new Date();
+    const todayStr = now.toISOString().slice(0, 10);
+    const lastStudy = user.lastStudyDate ? new Date(user.lastStudyDate).toISOString().slice(0, 10) : null;
+    if (lastStudy !== todayStr) {
+      const yesterday = new Date(now);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yestStr = yesterday.toISOString().slice(0, 10);
+      user.streak = lastStudy === yestStr ? (user.streak || 0) + 1 : 1;
+      user.lastStudyDate = now;
+    }
+
     await user.save();
     await session.save();
 
