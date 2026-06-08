@@ -1,39 +1,15 @@
 import express from 'express';
-import Anthropic from '@anthropic-ai/sdk';
+import Groq from 'groq-sdk';
 import StudyPlan from '../models/StudyPlan.js';
 import User from '../models/User.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
-const getAnthropicClient = () => new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+async function generatePlanJSON(topic, difficulty, duration) {
+  const prompt = `Create a detailed study plan for learning "${topic}" at ${difficulty || 'Intermediate'} level over ${duration || '1 month'}.
 
-// GET /api/planner
-router.get('/', protect, async (req, res) => {
-  try {
-    const plans = await StudyPlan.find({ userId: req.user._id }).sort({ createdAt: -1 });
-    res.json(plans);
-  } catch (err) {
-    console.error('Get plans error:', err.message);
-    res.status(500).json({ message: 'Server error' });
-  }
-});
-
-// POST /api/planner/generate
-router.post('/generate', protect, async (req, res) => {
-  try {
-    const { topic, difficulty, duration } = req.body;
-
-    if (!topic || !topic.trim()) {
-      return res.status(400).json({ message: 'Topic is required' });
-    }
-
-    const user = await User.findById(req.user._id);
-    const aiModel = user.settings?.aiModel || 'claude-sonnet-4-6';
-
-    const prompt = `Create a detailed study plan for learning "${topic}" at ${difficulty || 'Intermediate'} level over ${duration || '1 month'}.
-
-Return ONLY valid JSON (no markdown, no explanation) in exactly this format:
+Return ONLY valid JSON (no markdown, no explanation, no code fences) in exactly this format:
 {
   "title": "Study Plan Title",
   "totalDuration": "${duration || '1 month'}",
@@ -50,30 +26,51 @@ Return ONLY valid JSON (no markdown, no explanation) in exactly this format:
   ]
 }
 
-Generate 5-8 modules with meaningful titles and 3-5 topics each. The first module should have status "in-progress", all others "upcoming". Make it realistic and progressively structured.`;
+Generate 5-8 modules with meaningful titles and 3-5 topics each. First module status must be "in-progress", rest "upcoming". Make it realistic and progressively structured.`;
+
+  if (process.env.GROQ_API_KEY && !process.env.GROQ_API_KEY.includes('your_')) {
+    const client = new Groq({ apiKey: process.env.GROQ_API_KEY });
+    const response = await client.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
+      max_tokens: 2048,
+      temperature: 0.3,
+      messages: [
+        { role: 'system', content: 'You are an expert curriculum designer. Return ONLY valid JSON with no markdown, no explanation, no code fences. Just raw JSON.' },
+        { role: 'user', content: prompt },
+      ],
+    });
+    const raw = response.choices[0].message.content.trim();
+    const jsonText = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+    return JSON.parse(jsonText);
+  }
+
+  throw new Error('No AI provider configured');
+}
+
+router.get('/', protect, async (req, res) => {
+  try {
+    const plans = await StudyPlan.find({ userId: req.user._id }).sort({ createdAt: -1 });
+    res.json(plans);
+  } catch (err) {
+    console.error('Get plans error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.post('/generate', protect, async (req, res) => {
+  try {
+    const { topic, difficulty, duration } = req.body;
+    if (!topic || !topic.trim()) return res.status(400).json({ message: 'Topic is required' });
 
     let planData;
     try {
-      const client = getAnthropicClient();
-      const response = await client.messages.create({
-        model: aiModel,
-        max_tokens: 2048,
-        messages: [{ role: 'user', content: prompt }],
-      });
-
-      const rawText = response.content[0].text.trim();
-      // Strip markdown code fences if present
-      const jsonText = rawText.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
-      planData = JSON.parse(jsonText);
+      planData = await generatePlanJSON(topic.trim(), difficulty, duration);
     } catch (parseErr) {
       console.error('AI/parse error:', parseErr.message);
       return res.status(500).json({ message: 'Failed to generate study plan. Please try again.' });
     }
 
-    // Ensure first module is in-progress
-    if (planData.modules && planData.modules.length > 0) {
-      planData.modules[0].status = 'in-progress';
-    }
+    if (planData.modules?.length > 0) planData.modules[0].status = 'in-progress';
 
     const plan = await StudyPlan.create({
       userId: req.user._id,
@@ -92,29 +89,19 @@ Generate 5-8 modules with meaningful titles and 3-5 topics each. The first modul
   }
 });
 
-// PUT /api/planner/:id/modules/:moduleId
 router.put('/:id/modules/:moduleId', protect, async (req, res) => {
   try {
     const { status } = req.body;
-    if (!status) {
-      return res.status(400).json({ message: 'Status is required' });
-    }
+    if (!status) return res.status(400).json({ message: 'Status is required' });
 
     const plan = await StudyPlan.findOne({ _id: req.params.id, userId: req.user._id });
-    if (!plan) {
-      return res.status(404).json({ message: 'Plan not found' });
-    }
+    if (!plan) return res.status(404).json({ message: 'Plan not found' });
 
     const module = plan.modules.id(req.params.moduleId);
-    if (!module) {
-      return res.status(404).json({ message: 'Module not found' });
-    }
+    if (!module) return res.status(404).json({ message: 'Module not found' });
 
     module.status = status;
-
-    // Recalculate completedModules
     plan.completedModules = plan.modules.filter((m) => m.status === 'completed').length;
-
     await plan.save();
     res.json(plan);
   } catch (err) {
@@ -123,13 +110,10 @@ router.put('/:id/modules/:moduleId', protect, async (req, res) => {
   }
 });
 
-// DELETE /api/planner/:id
 router.delete('/:id', protect, async (req, res) => {
   try {
     const plan = await StudyPlan.findOneAndDelete({ _id: req.params.id, userId: req.user._id });
-    if (!plan) {
-      return res.status(404).json({ message: 'Plan not found' });
-    }
+    if (!plan) return res.status(404).json({ message: 'Plan not found' });
     res.json({ message: 'Plan deleted' });
   } catch (err) {
     console.error('Delete plan error:', err.message);

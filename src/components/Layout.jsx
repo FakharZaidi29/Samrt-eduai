@@ -45,7 +45,7 @@ export default function Layout({ children, activeView, setActiveView, darkMode, 
             <Menu size={20} />
           </button>
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
+            <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center">
               <span className="text-white text-xs font-bold">E</span>
             </div>
             <span className="font-semibold text-slate-900 dark:text-white text-sm">EduAI</span>

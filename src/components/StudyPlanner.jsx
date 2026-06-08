@@ -41,12 +41,12 @@ const STATUS = {
   'in-progress': {
     label: 'In Progress',
     Icon: Play,
-    iconBg: 'bg-red-100 dark:bg-red-900/30',
-    iconColor: 'text-red-600 dark:text-red-400',
-    cardBg: 'bg-white dark:bg-zinc-900 border-red-200 dark:border-red-900',
-    badge: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
+    iconBg: 'bg-red-100 dark:bg-blue-900/30',
+    iconColor: 'text-red-600 dark:text-blue-400',
+    cardBg: 'bg-white dark:bg-zinc-900 border-blue-200 dark:border-blue-900',
+    badge: 'bg-red-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400',
     dot: 'bg-red-500',
-    actionBg: 'bg-red-600 hover:bg-red-700 text-white',
+    actionBg: 'bg-blue-600 hover:bg-red-700 text-white',
   },
   upcoming: {
     label: 'Upcoming',
@@ -277,7 +277,7 @@ export default function StudyPlanner({ setActiveView }) {
           </div>
           <button
             onClick={() => setShowForm((v) => !v)}
-            className="flex items-center gap-2 bg-red-600 hover:bg-red-700 active:scale-[0.98] text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm shadow-red-200/50 dark:shadow-red-900/30 flex-shrink-0"
+            className="flex items-center gap-2 bg-blue-600 hover:bg-red-700 active:scale-[0.98] text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm shadow-blue-200/50 dark:shadow-blue-900/30 flex-shrink-0"
           >
             <Plus size={16} />
             New Plan
@@ -293,7 +293,7 @@ export default function StudyPlanner({ setActiveView }) {
                   onClick={() => setActivePlanId(p._id)}
                   className={`text-xs font-semibold px-3 py-1.5 rounded-xl transition-all ${
                     activePlanId === p._id
-                      ? 'bg-red-600 text-white shadow-sm'
+                      ? 'bg-blue-600 text-white shadow-sm'
                       : 'bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-zinc-700'
                   }`}
                 >
@@ -333,7 +333,7 @@ export default function StudyPlanner({ setActiveView }) {
                   onChange={(e) => setTopic(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleGenerate()}
                   placeholder="e.g. Machine Learning, Web Dev, Data Science, Calculus…"
-                  className="w-full px-4 py-3 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-red-400 dark:focus:border-red-600 focus:ring-2 focus:ring-red-100 dark:focus:ring-red-900/30 transition-all"
+                  className="w-full px-4 py-3 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-blue-400 dark:focus:border-blue-600 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 transition-all"
                 />
               </div>
 
@@ -350,7 +350,7 @@ export default function StudyPlanner({ setActiveView }) {
                         onClick={() => setDifficulty(opt)}
                         className={`flex-1 py-2 text-xs font-semibold rounded-xl transition-all duration-150 ${
                           difficulty === opt
-                            ? 'bg-red-600 text-white shadow-sm shadow-red-200/40 dark:shadow-red-900/30'
+                            ? 'bg-blue-600 text-white shadow-sm shadow-blue-200/40 dark:shadow-blue-900/30'
                             : 'bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-zinc-700'
                         }`}
                       >
@@ -367,7 +367,7 @@ export default function StudyPlanner({ setActiveView }) {
                   <select
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-sm text-slate-900 dark:text-white outline-none focus:border-red-400 dark:focus:border-red-600 transition-all cursor-pointer"
+                    className="w-full px-3 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-sm text-slate-900 dark:text-white outline-none focus:border-blue-400 dark:focus:border-blue-600 transition-all cursor-pointer"
                   >
                     {DURATION.map((opt) => <option key={opt}>{opt}</option>)}
                   </select>
@@ -384,8 +384,8 @@ export default function StudyPlanner({ setActiveView }) {
               </div>
 
               {generateError && (
-                <div className="px-4 py-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/40 rounded-xl">
-                  <p className="text-sm text-red-600 dark:text-red-400">{generateError}</p>
+                <div className="px-4 py-3 bg-red-50 dark:bg-red-900/20 border border-blue-200 dark:border-blue-900/40 rounded-xl">
+                  <p className="text-sm text-red-600 dark:text-blue-400">{generateError}</p>
                 </div>
               )}
             </div>
@@ -397,7 +397,7 @@ export default function StudyPlanner({ setActiveView }) {
               className={`w-full py-3 font-semibold text-sm rounded-xl flex items-center justify-center gap-2 transition-all duration-200 ${
                 generating || !topic.trim()
                   ? 'bg-slate-100 dark:bg-zinc-800 text-slate-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white shadow-sm shadow-red-200/50 dark:shadow-red-900/30 active:scale-[0.99]'
+                  : 'bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white shadow-sm shadow-blue-200/50 dark:shadow-blue-900/30 active:scale-[0.99]'
               }`}
             >
               {generating ? (
@@ -418,12 +418,12 @@ export default function StudyPlanner({ setActiveView }) {
         {/* Loading plans */}
         {plansLoading ? (
           <div className="flex items-center justify-center py-16">
-            <Loader2 size={24} className="animate-spin text-red-500" />
+            <Loader2 size={24} className="animate-spin text-blue-500" />
           </div>
         ) : !activePlan ? (
           /* Empty state */
           <div className="text-center py-16">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-red-900/30">
+            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-blue-900/30">
               <BookOpen size={24} className="text-white" />
             </div>
             <h2 className="text-base font-bold text-slate-900 dark:text-white mb-2">No Study Plans Yet</h2>
@@ -432,7 +432,7 @@ export default function StudyPlanner({ setActiveView }) {
             </p>
             <button
               onClick={() => setShowForm(true)}
-              className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors shadow-sm shadow-red-200/50 dark:shadow-red-900/30"
+              className="inline-flex items-center gap-2 bg-blue-600 hover:bg-red-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors shadow-sm shadow-blue-200/50 dark:shadow-blue-900/30"
             >
               <Sparkles size={16} />
               Generate Your First Plan
@@ -442,13 +442,13 @@ export default function StudyPlanner({ setActiveView }) {
           <>
             {/* ── Plan overview banner ─────────────────────────────────────────── */}
             <div className="relative rounded-2xl bg-gradient-to-r from-black via-red-800 to-black p-5 md:p-6 text-white overflow-hidden">
-              <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-red-600/20 blur-2xl pointer-events-none" />
+              <div className="absolute -top-8 -right-8 w-40 h-40 rounded-full bg-blue-600/20 blur-2xl pointer-events-none" />
               <div className="relative">
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-1">
-                      <Brain size={14} className="text-red-300" />
-                      <span className="text-red-300 text-[11px] font-semibold uppercase tracking-wide">Active Plan</span>
+                      <Brain size={14} className="text-blue-300" />
+                      <span className="text-blue-300 text-[11px] font-semibold uppercase tracking-wide">Active Plan</span>
                     </div>
                     <h2 className="text-lg font-bold truncate">{activePlan.title}</h2>
                     <p className="text-red-200 text-xs mt-0.5">{activePlan.difficulty} · {activePlan.totalDuration}</p>
@@ -505,7 +505,7 @@ export default function StudyPlanner({ setActiveView }) {
                   label: 'Modules Left',
                   value: `${activePlan.totalModules - activePlan.completedModules}`,
                   icon: Calendar,
-                  color: 'text-red-600 dark:text-red-400',
+                  color: 'text-red-600 dark:text-blue-400',
                   bg: 'bg-red-50 dark:bg-red-900/20',
                 },
                 {
@@ -559,7 +559,7 @@ export default function StudyPlanner({ setActiveView }) {
             <div className="flex justify-center pt-2">
               <button
                 onClick={() => setActiveView('chat')}
-                className="flex items-center gap-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:underline"
+                className="flex items-center gap-2 text-sm font-semibold text-red-600 dark:text-blue-400 hover:underline"
               >
                 Get AI help with this plan
                 <ArrowRight size={15} />

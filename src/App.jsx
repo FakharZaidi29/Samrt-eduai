@@ -6,27 +6,37 @@ import ChatInterface from './components/ChatInterface';
 import StudyPlanner from './components/StudyPlanner';
 import Analytics from './components/Analytics';
 import Settings from './components/Settings';
-import AuthPage from './pages/AuthPage.jsx';
+import LandingPage from './pages/LandingPage.jsx';
+import AuthModal from './pages/AuthModal.jsx';
 import { Loader2 } from 'lucide-react';
 
 function AppInner() {
   const { user, loading } = useAuth();
   const [activeView, setActiveView] = useState('dashboard');
-  const [darkMode, setDarkMode] = useState(user?.settings?.darkMode || false);
+  const [darkMode, setDarkMode] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
 
   if (loading) {
     return (
-      <div className="h-screen bg-zinc-950 flex items-center justify-center">
+      <div className="h-screen bg-slate-950 flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
-          <Loader2 size={32} className="text-red-500 animate-spin" />
-          <p className="text-zinc-400 text-sm">Loading EduAI…</p>
+          <Loader2 size={32} className="text-blue-500 animate-spin" />
+          <p className="text-slate-400 text-sm">Loading EduAI…</p>
         </div>
       </div>
     );
   }
 
   if (!user) {
-    // return <AuthPage />;
+    return (
+      <>
+        <LandingPage
+          onGetStarted={() => setShowAuth(true)}
+          onLogin={() => setShowAuth(true)}
+        />
+        {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+      </>
+    );
   }
 
   return (
@@ -41,12 +51,7 @@ function AppInner() {
         {activeView === 'chat' && <ChatInterface />}
         {activeView === 'planner' && <StudyPlanner setActiveView={setActiveView} />}
         {activeView === 'analytics' && <Analytics />}
-        {activeView === 'settings' && (
-          <Settings
-            darkMode={darkMode}
-            setDarkMode={setDarkMode}
-          />
-        )}
+        {activeView === 'settings' && <Settings darkMode={darkMode} setDarkMode={setDarkMode} />}
       </Layout>
     </div>
   );

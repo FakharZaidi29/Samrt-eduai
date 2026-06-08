@@ -74,7 +74,7 @@ export default function AuthPage() {
       <div className="relative w-full max-w-sm">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-red-600 to-red-900 flex items-center justify-center shadow-lg shadow-red-900/40 mb-4">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-blue-900/40 mb-4">
             <Sparkles size={26} className="text-white" />
           </div>
           <h1 className="text-2xl font-bold text-white">EduAI</h1>
@@ -120,7 +120,7 @@ export default function AuthPage() {
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Alex Johnson"
                   autoComplete="name"
-                  className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl text-sm text-white placeholder-zinc-500 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-900/40 transition-all"
+                  className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl text-sm text-white placeholder-zinc-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-900/40 transition-all"
                 />
               </div>
             )}
@@ -135,7 +135,7 @@ export default function AuthPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 autoComplete="email"
-                className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl text-sm text-white placeholder-zinc-500 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-900/40 transition-all"
+                className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-xl text-sm text-white placeholder-zinc-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-900/40 transition-all"
               />
             </div>
 
@@ -150,7 +150,7 @@ export default function AuthPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder={mode === 'register' ? 'At least 6 characters' : 'Enter your password'}
                   autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
-                  className="w-full px-4 py-2.5 pr-11 bg-zinc-800 border border-zinc-700 rounded-xl text-sm text-white placeholder-zinc-500 outline-none focus:border-red-500 focus:ring-2 focus:ring-red-900/40 transition-all"
+                  className="w-full px-4 py-2.5 pr-11 bg-zinc-800 border border-zinc-700 rounded-xl text-sm text-white placeholder-zinc-500 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-900/40 transition-all"
                 />
                 <button
                   type="button"
@@ -163,15 +163,15 @@ export default function AuthPage() {
             </div>
 
             {error && (
-              <div className="px-4 py-3 bg-red-900/30 border border-red-800/50 rounded-xl">
-                <p className="text-sm text-red-400">{error}</p>
+              <div className="px-4 py-3 bg-blue-900/30 border border-blue-800/50 rounded-xl">
+                <p className="text-sm text-blue-400">{error}</p>
               </div>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-red-600 hover:bg-red-700 active:scale-[0.99] text-white text-sm font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 shadow-md shadow-red-900/40 disabled:opacity-60 disabled:cursor-not-allowed mt-2"
+              className="w-full py-3 bg-blue-600 hover:bg-red-700 active:scale-[0.99] text-white text-sm font-semibold rounded-xl transition-all duration-150 flex items-center justify-center gap-2 shadow-md shadow-blue-900/40 disabled:opacity-60 disabled:cursor-not-allowed mt-2"
             >
               {loading ? (
                 <>
@@ -189,7 +189,7 @@ export default function AuthPage() {
               {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}{' '}
               <button
                 onClick={toggleMode}
-                className="text-red-400 hover:text-red-300 font-semibold transition-colors"
+                className="text-blue-400 hover:text-blue-300 font-semibold transition-colors"
               >
                 {mode === 'login' ? 'Sign up' : 'Sign in'}
               </button>

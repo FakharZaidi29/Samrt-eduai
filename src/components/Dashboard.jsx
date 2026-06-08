@@ -24,8 +24,8 @@ import { api } from '../services/api.js';
 
 const COLOR = {
   red: {
-    icon: 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400',
-    badge: 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400',
+    icon: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
+    badge: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400',
   },
   emerald: {
     icon: 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400',
@@ -51,7 +51,7 @@ const LESSONS = [
     level: 'Intermediate',
     progress: 35,
     rating: 4.9,
-    gradient: 'from-red-600 to-red-800',
+    gradient: 'from-blue-600 to-blue-800',
   },
   {
     title: 'Data Structures & Algorithms',
@@ -154,13 +154,13 @@ function LessonCard({ lesson }) {
                 style={{ width: `${lesson.progress}%` }}
               />
             </div>
-            <button className="w-full py-2 text-xs font-semibold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex items-center justify-center gap-1.5">
+            <button className="w-full py-2 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex items-center justify-center gap-1.5">
               <Play size={11} fill="currentColor" />
               Continue Learning
             </button>
           </div>
         ) : (
-          <button className="w-full py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-zinc-800 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-700 group-hover:bg-red-50 dark:group-hover:bg-red-900/20 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors flex items-center justify-center gap-1.5">
+          <button className="w-full py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-zinc-800 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-700 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center justify-center gap-1.5">
             <Play size={11} />
             Start Learning
           </button>
@@ -197,7 +197,7 @@ export default function Dashboard({ setActiveView }) {
       progress: Math.min((stats?.totalStudyHours ?? 0) / 50 * 100, 100),
       icon: Clock,
       color: 'red',
-      gradient: 'from-red-600 to-red-700',
+      gradient: 'from-blue-600 to-blue-700',
     },
     {
       label: 'Tasks Completed',
@@ -227,7 +227,7 @@ export default function Dashboard({ setActiveView }) {
       progress: weeklyProgress,
       icon: TrendingUp,
       color: 'red',
-      gradient: 'from-red-500 to-red-700',
+      gradient: 'from-blue-500 to-blue-700',
     },
   ];
 
@@ -244,18 +244,18 @@ export default function Dashboard({ setActiveView }) {
       <div className="p-6 max-w-7xl mx-auto space-y-6 pb-10">
 
         {/* Hero / Welcome banner */}
-        <div className="relative rounded-2xl bg-gradient-to-r from-black via-red-800 to-black p-6 md:p-8 text-white overflow-hidden">
-          <div className="absolute -top-12 -right-12 w-56 h-56 rounded-full bg-red-600/20 blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-12 left-1/3 w-64 h-64 rounded-full bg-red-700/20 blur-3xl pointer-events-none" />
+        <div className="relative rounded-2xl bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 p-6 md:p-8 text-white overflow-hidden">
+          <div className="absolute -top-12 -right-12 w-56 h-56 rounded-full bg-blue-600/20 blur-3xl pointer-events-none" />
+          <div className="absolute -bottom-12 left-1/3 w-64 h-64 rounded-full bg-blue-700/20 blur-3xl pointer-events-none" />
 
           <div className="relative flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
             <div>
               <div className="flex items-center gap-2 mb-2">
-                <Sparkles size={14} className="text-red-300" />
-                <span className="text-red-300 text-xs font-medium tracking-wide">AI-Powered Learning</span>
+                <Sparkles size={14} className="text-blue-300" />
+                <span className="text-blue-300 text-xs font-medium tracking-wide">AI-Powered Learning</span>
               </div>
               <h1 className="text-2xl md:text-3xl font-bold mb-2">Welcome back, {firstName}!</h1>
-              <p className="text-red-100 text-sm max-w-md leading-relaxed">
+              <p className="text-blue-100 text-sm max-w-md leading-relaxed">
                 {streak > 0 ? (
                   <>
                     You're on a{' '}
@@ -293,7 +293,7 @@ export default function Dashboard({ setActiveView }) {
                 ) : (
                   <div className="text-3xl font-extrabold">{streak}</div>
                 )}
-                <div className="text-red-200 text-xs mt-0.5">Day Streak</div>
+                <div className="text-blue-200 text-xs mt-0.5">Day Streak</div>
               </div>
               <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-2xl px-5 py-4 text-center">
                 {statsLoading ? (
@@ -301,7 +301,7 @@ export default function Dashboard({ setActiveView }) {
                 ) : (
                   <div className="text-3xl font-extrabold">{weeklyProgress}<span className="text-lg">%</span></div>
                 )}
-                <div className="text-red-200 text-xs mt-0.5">Weekly Goal</div>
+                <div className="text-blue-200 text-xs mt-0.5">Weekly Goal</div>
               </div>
             </div>
           </div>
@@ -321,7 +321,7 @@ export default function Dashboard({ setActiveView }) {
               <h2 className="font-semibold text-slate-900 dark:text-white text-sm">Your Stats</h2>
               <button
                 onClick={() => setActiveView('analytics')}
-                className="text-[11px] font-medium text-red-600 dark:text-red-400 flex items-center gap-0.5 hover:underline"
+                className="text-[11px] font-medium text-blue-600 dark:text-blue-400 flex items-center gap-0.5 hover:underline"
               >
                 View all <ChevronRight size={12} />
               </button>
@@ -357,7 +357,7 @@ export default function Dashboard({ setActiveView }) {
               <h2 className="font-semibold text-slate-900 dark:text-white text-sm">Recommended Lessons</h2>
               <button
                 onClick={() => setActiveView('planner')}
-                className="text-[11px] font-medium text-red-600 dark:text-red-400 flex items-center gap-0.5 hover:underline"
+                className="text-[11px] font-medium text-blue-600 dark:text-blue-400 flex items-center gap-0.5 hover:underline"
               >
                 See all <ArrowRight size={12} />
               </button>
@@ -371,8 +371,8 @@ export default function Dashboard({ setActiveView }) {
         {/* AI quick-action strip */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
-            { icon: MessageSquare, label: 'Ask AI Tutor', sub: 'Get instant explanations', color: 'red', gradient: 'from-red-50 to-red-100/50 dark:from-red-900/20 dark:to-red-900/10', border: 'border-red-100 dark:border-red-900/40', view: 'chat' },
-            { icon: BookOpen, label: 'Generate Notes', sub: 'Summarise any topic fast', color: 'red', gradient: 'from-red-50 to-red-100/50 dark:from-red-900/20 dark:to-red-900/10', border: 'border-red-100 dark:border-red-900/40', view: 'planner' },
+            { icon: MessageSquare, label: 'Ask AI Tutor', sub: 'Get instant explanations', color: 'red', gradient: 'from-red-50 to-red-100/50 dark:from-red-900/20 dark:to-red-900/10', border: 'border-blue-100 dark:border-blue-900/40', view: 'chat' },
+            { icon: BookOpen, label: 'Generate Notes', sub: 'Summarise any topic fast', color: 'red', gradient: 'from-red-50 to-red-100/50 dark:from-red-900/20 dark:to-red-900/10', border: 'border-blue-100 dark:border-blue-900/40', view: 'planner' },
             { icon: Target, label: "Set Today's Goal", sub: 'Track daily objectives', color: 'emerald', gradient: 'from-emerald-50 to-emerald-100/50 dark:from-emerald-900/20 dark:to-emerald-900/10', border: 'border-emerald-100 dark:border-emerald-900/40', view: 'planner' },
           ].map((item) => {
             const c = COLOR[item.color];
