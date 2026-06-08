@@ -11,6 +11,7 @@ const moduleSchema = new mongoose.Schema(
     },
     topics: [{ type: String }],
     resources: { type: Number, default: 3 },
+    notes: { type: String, default: '' },
   },
   { _id: true }
 );

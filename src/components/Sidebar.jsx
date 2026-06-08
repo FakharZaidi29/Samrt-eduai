@@ -9,6 +9,9 @@ import {
   BarChart3,
   Bell,
   LogOut,
+  Trophy,
+  PenTool,
+  CreditCard,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -16,10 +19,13 @@ const NAV_ITEMS = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { id: 'chat', label: 'AI Tutor', icon: MessageSquare, badge: 'AI' },
   { id: 'planner', label: 'Study Planner', icon: BookOpen },
+  { id: 'competition', label: 'Challenge Mode', icon: Trophy, badge: 'NEW' },
+  { id: 'practice', label: 'Practice Questions', icon: PenTool },
 ];
 
 const BOTTOM_NAV = [
   { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+  { id: 'pricing', label: 'Upgrade Plan', icon: CreditCard },
   { id: 'settings', label: 'Settings', icon: Settings },
 ];
 

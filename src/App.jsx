@@ -6,6 +6,9 @@ import ChatInterface from './components/ChatInterface';
 import StudyPlanner from './components/StudyPlanner';
 import Analytics from './components/Analytics';
 import Settings from './components/Settings';
+import CompetitionMode from './components/CompetitionMode.jsx';
+import PracticeQuestions from './components/PracticeQuestions.jsx';
+import Pricing from './components/Pricing.jsx';
 import LandingPage from './pages/LandingPage.jsx';
 import AuthModal from './pages/AuthModal.jsx';
 import { Loader2 } from 'lucide-react';
@@ -15,6 +18,12 @@ function AppInner() {
   const [activeView, setActiveView] = useState('dashboard');
   const [darkMode, setDarkMode] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
+  const [chatTopic, setChatTopic] = useState(null);
+
+  const goToChat = (topic = null) => {
+    setChatTopic(topic);
+    setActiveView('chat');
+  };
 
   if (loading) {
     return (
@@ -47,11 +56,14 @@ function AppInner() {
         darkMode={darkMode}
         setDarkMode={setDarkMode}
       >
-        {activeView === 'dashboard' && <Dashboard setActiveView={setActiveView} />}
-        {activeView === 'chat' && <ChatInterface />}
+        {activeView === 'dashboard' && <Dashboard setActiveView={setActiveView} goToChat={goToChat} />}
+        {activeView === 'chat' && <ChatInterface initialTopic={chatTopic} onTopicConsumed={() => setChatTopic(null)} />}
         {activeView === 'planner' && <StudyPlanner setActiveView={setActiveView} />}
         {activeView === 'analytics' && <Analytics />}
         {activeView === 'settings' && <Settings darkMode={darkMode} setDarkMode={setDarkMode} />}
+        {activeView === 'competition' && <CompetitionMode />}
+        {activeView === 'practice' && <PracticeQuestions />}
+        {activeView === 'pricing' && <Pricing setActiveView={setActiveView} />}
       </Layout>
     </div>
   );

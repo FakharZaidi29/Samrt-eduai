@@ -16,7 +16,7 @@ function ToggleSwitch({ enabled, onChange }) {
     <button
       onClick={() => onChange(!enabled)}
       className={`rounded-full transition-colors duration-300 flex items-center px-0.5 flex-shrink-0 ${
-        enabled ? 'bg-red-600' : 'bg-slate-200 dark:bg-zinc-700'
+        enabled ? 'bg-blue-600' : 'bg-slate-200 dark:bg-zinc-700'
       }`}
       style={{ height: '22px', minWidth: '40px' }}
     >
@@ -45,8 +45,8 @@ function SectionCard({ title, icon: Icon, children }) {
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-slate-100 dark:border-zinc-800 overflow-hidden">
       <div className="flex items-center gap-2.5 px-5 py-4 border-b border-slate-100 dark:border-zinc-800">
-        <div className="w-7 h-7 rounded-lg bg-red-50 dark:bg-red-900/20 flex items-center justify-center">
-          <Icon size={14} className="text-red-600 dark:text-red-400" />
+        <div className="w-7 h-7 rounded-lg bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center">
+          <Icon size={14} className="text-blue-600 dark:text-blue-400" />
         </div>
         <h2 className="font-semibold text-slate-900 dark:text-white text-sm">{title}</h2>
       </div>
@@ -59,6 +59,7 @@ export default function Settings({ darkMode, setDarkMode }) {
   const { user, updateUser } = useAuth();
 
   const [name, setName] = useState(user?.name || '');
+  const [eduLevel, setEduLevel] = useState(user?.settings?.educationLevel || 'Matric (9-10)');
   const [language, setLanguage] = useState(user?.settings?.language || 'English');
   const [notifs, setNotifs] = useState({
     email: user?.settings?.emailNotifications ?? true,
@@ -84,6 +85,7 @@ export default function Settings({ darkMode, setDarkMode }) {
     try {
       const updatedUser = await api.auth.updateSettings({
         name,
+        educationLevel: eduLevel,
         language,
         darkMode,
         emailNotifications: notifs.email,
@@ -123,7 +125,7 @@ export default function Settings({ darkMode, setDarkMode }) {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-40 px-3 py-1.5 text-sm bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-slate-900 dark:text-white outline-none focus:border-red-400 dark:focus:border-red-600 transition-colors"
+              className="w-40 px-3 py-1.5 text-sm bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-slate-900 dark:text-white outline-none focus:border-blue-400 dark:focus:border-blue-600 transition-colors"
             />
           </SettingRow>
           <SettingRow label="Email" description="Used for login and notifications">
@@ -134,11 +136,20 @@ export default function Settings({ darkMode, setDarkMode }) {
               className="w-44 px-3 py-1.5 text-sm bg-slate-100 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 rounded-xl text-slate-500 dark:text-slate-400 outline-none cursor-not-allowed"
             />
           </SettingRow>
+          <SettingRow label="Education Level" description="Your current class / degree level in Pakistan">
+            <select
+              value={eduLevel}
+              onChange={e => setEduLevel(e.target.value)}
+              className="px-3 py-1.5 text-sm bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-slate-900 dark:text-white outline-none focus:border-blue-400 transition-colors cursor-pointer"
+            >
+              {['Class 1-5 (Primary)','Class 6-8 (Middle)','Matric (9-10)','FSc / FA (11-12)','BA / BS','Masters / MPhil','PhD','Teacher / Educator'].map(l => <option key={l}>{l}</option>)}
+            </select>
+          </SettingRow>
           <SettingRow label="Language" description="App display language">
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
-              className="px-3 py-1.5 text-sm bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-slate-900 dark:text-white outline-none focus:border-red-400 dark:focus:border-red-600 transition-colors cursor-pointer"
+              className="px-3 py-1.5 text-sm bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-slate-900 dark:text-white outline-none focus:border-blue-400 transition-colors cursor-pointer"
             >
               {['English', 'Urdu', 'Arabic', 'French', 'Spanish'].map((l) => (
                 <option key={l}>{l}</option>
@@ -179,7 +190,7 @@ export default function Settings({ darkMode, setDarkMode }) {
             <select
               value={aiModel}
               onChange={(e) => setAiModel(e.target.value)}
-              className="px-3 py-1.5 text-sm bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-slate-900 dark:text-white outline-none focus:border-red-400 dark:focus:border-red-600 transition-colors cursor-pointer"
+              className="px-3 py-1.5 text-sm bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-slate-900 dark:text-white outline-none focus:border-blue-400 dark:focus:border-blue-600 transition-colors cursor-pointer"
             >
               <option value="claude-sonnet-4-6">Claude Sonnet 4.6 (Fast)</option>
               <option value="claude-opus-4-5">Claude Opus 4.5 (Best)</option>
@@ -194,7 +205,7 @@ export default function Settings({ darkMode, setDarkMode }) {
         {/* Security */}
         <SectionCard title="Security" icon={Shield}>
           <SettingRow label="Change Password" description="Update your account password">
-            <button className="text-xs font-semibold text-red-600 dark:text-red-400 px-3 py-1.5 rounded-xl border border-red-200 dark:border-red-900/40 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+            <button className="text-xs font-semibold text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-xl border border-red-200 dark:border-red-900/40 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
               Change
             </button>
           </SettingRow>
@@ -204,7 +215,7 @@ export default function Settings({ darkMode, setDarkMode }) {
             </button>
           </SettingRow>
           <SettingRow label="Delete Account" description="Permanently remove your account and data">
-            <button className="text-xs font-semibold text-red-600 dark:text-red-400 px-3 py-1.5 rounded-xl border border-red-200 dark:border-red-900/40 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+            <button className="text-xs font-semibold text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-xl border border-red-200 dark:border-red-900/40 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
               Delete
             </button>
           </SettingRow>
@@ -212,8 +223,8 @@ export default function Settings({ darkMode, setDarkMode }) {
 
         {/* Save error */}
         {saveError && (
-          <div className="px-4 py-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-900/40 rounded-xl">
-            <p className="text-sm text-red-600 dark:text-red-400">{saveError}</p>
+          <div className="px-4 py-3 bg-blue-50 dark:bg-blue-900/20 border border-red-200 dark:border-red-900/40 rounded-xl">
+            <p className="text-sm text-blue-600 dark:text-blue-400">{saveError}</p>
           </div>
         )}
 

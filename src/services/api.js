@@ -51,6 +51,8 @@ export const api = {
       request('POST', '/planner/generate', { topic, difficulty, duration }),
     updateModule: (planId, moduleId, status) =>
       request('PUT', `/planner/${planId}/modules/${moduleId}`, { status }),
+    saveNotes: (planId, moduleId, notes) =>
+      request('PUT', `/planner/${planId}/modules/${moduleId}/notes`, { notes }),
     deletePlan: (planId) => request('DELETE', `/planner/${planId}`),
   },
 

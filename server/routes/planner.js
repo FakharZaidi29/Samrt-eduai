@@ -110,6 +110,22 @@ router.put('/:id/modules/:moduleId', protect, async (req, res) => {
   }
 });
 
+router.put('/:id/modules/:moduleId/notes', protect, async (req, res) => {
+  try {
+    const { notes } = req.body;
+    const plan = await StudyPlan.findOne({ _id: req.params.id, userId: req.user._id });
+    if (!plan) return res.status(404).json({ message: 'Plan not found' });
+    const module = plan.modules.id(req.params.moduleId);
+    if (!module) return res.status(404).json({ message: 'Module not found' });
+    module.notes = notes || '';
+    await plan.save();
+    res.json(plan);
+  } catch (err) {
+    console.error('Save notes error:', err.message);
+    res.status(500).json({ message: 'Server error saving notes' });
+  }
+});
+
 router.delete('/:id', protect, async (req, res) => {
   try {
     const plan = await StudyPlan.findOneAndDelete({ _id: req.params.id, userId: req.user._id });

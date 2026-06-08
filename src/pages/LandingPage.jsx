@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
   Sparkles, Brain, BookOpen, BarChart3, MessageSquare,
   ArrowRight, Play, Star, Zap, Shield, Globe, ChevronRight,
-  GraduationCap, Target, Clock, Users,
+  GraduationCap, Target, Clock, Users, Trophy, PenTool,
 } from 'lucide-react';
 
 const FEATURES = [
@@ -11,32 +11,48 @@ const FEATURES = [
     title: 'AI Tutor',
     desc: 'Get instant explanations, step-by-step solutions, and personalized help on any topic — from calculus to coding.',
     gradient: 'from-blue-500 to-cyan-500',
-    bg: 'bg-blue-50 dark:bg-blue-900/20',
-    iconColor: 'text-blue-600 dark:text-blue-400',
+    bg: 'bg-blue-900/20',
+    iconColor: 'text-blue-400',
   },
   {
     icon: BookOpen,
     title: 'Smart Study Planner',
     desc: 'AI generates a custom learning roadmap based on your topic, level, and timeline. Track every module.',
     gradient: 'from-violet-500 to-purple-600',
-    bg: 'bg-violet-50 dark:bg-violet-900/20',
-    iconColor: 'text-violet-600 dark:text-violet-400',
+    bg: 'bg-violet-900/20',
+    iconColor: 'text-violet-400',
+  },
+  {
+    icon: Trophy,
+    title: 'Challenge Mode',
+    desc: 'Compete in AI-graded quizzes across subjects. Get marks, grades, and instant feedback on every answer.',
+    gradient: 'from-amber-400 to-orange-500',
+    bg: 'bg-amber-900/20',
+    iconColor: 'text-amber-400',
+  },
+  {
+    icon: PenTool,
+    title: 'Practice Questions',
+    desc: 'Submit your answers and let AI review, rate, and provide detailed feedback to improve your understanding.',
+    gradient: 'from-emerald-500 to-teal-500',
+    bg: 'bg-emerald-900/20',
+    iconColor: 'text-emerald-400',
   },
   {
     icon: Play,
     title: 'Video Learning',
     desc: 'Curated YouTube videos recommended by AI to reinforce concepts visually — right inside the chat.',
     gradient: 'from-rose-500 to-pink-500',
-    bg: 'bg-rose-50 dark:bg-rose-900/20',
-    iconColor: 'text-rose-600 dark:text-rose-400',
+    bg: 'bg-rose-900/20',
+    iconColor: 'text-rose-400',
   },
   {
     icon: BarChart3,
     title: 'Progress Analytics',
     desc: 'Track study hours, completed modules, AI interactions, and weekly goals in one clear dashboard.',
-    gradient: 'from-emerald-500 to-teal-500',
-    bg: 'bg-emerald-50 dark:bg-emerald-900/20',
-    iconColor: 'text-emerald-600 dark:text-emerald-400',
+    gradient: 'from-indigo-500 to-blue-600',
+    bg: 'bg-indigo-900/20',
+    iconColor: 'text-indigo-400',
   },
 ];
 
@@ -90,24 +106,24 @@ export default function LandingPage({ onGetStarted, onLogin }) {
         <div className="absolute top-40 right-1/4 w-72 h-72 bg-cyan-600/10 rounded-full blur-3xl pointer-events-none" />
 
         <div className="relative max-w-4xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5 text-blue-400 text-sm mb-8">
+          <div className="inline-flex items-center gap-2 bg-blue-500/10 border border-blue-500/20 rounded-full px-4 py-1.5 text-blue-400 text-sm mb-8 animate-fadeIn animate-pulse-glow">
             <Zap size={13} className="text-blue-400" />
-            AI-Powered Education Platform
+            AI-Powered Education Platform for Pakistan 🇵🇰
           </div>
 
-          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6">
+          <h1 className="text-5xl md:text-7xl font-extrabold leading-tight mb-6 animate-fadeInUp">
             Learn Smarter
-            <span className="block bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent animate-shimmer" style={{backgroundSize:'200% auto'}}>
               with AI
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+          <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed animate-fadeInUp delay-200">
             Your personal AI tutor that explains concepts, creates custom study plans,
-            finds educational videos, and tracks your progress — all in one place.
+            finds educational videos, and tracks your progress — Class 1 to PhD, for every Pakistani student.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 animate-fadeInUp delay-300">
             <button
               onClick={onGetStarted}
               className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-4 rounded-2xl transition-all duration-200 shadow-xl shadow-blue-900/40 hover:shadow-blue-900/60 hover:scale-105"
@@ -126,9 +142,9 @@ export default function LandingPage({ onGetStarted, onLogin }) {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto animate-fadeInUp delay-400">
             {STATS.map((s) => (
-              <div key={s.label} className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center">
+              <div key={s.label} className="bg-white/5 border border-white/10 rounded-2xl p-4 text-center hover:bg-white/10 transition-all duration-200">
                 <div className="text-2xl font-extrabold text-white">{s.value}</div>
                 <div className="text-xs text-slate-500 mt-0.5">{s.label}</div>
               </div>
@@ -198,11 +214,11 @@ export default function LandingPage({ onGetStarted, onLogin }) {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {FEATURES.map((f) => (
             <div
               key={f.title}
-              className="group bg-slate-900 border border-white/5 hover:border-white/15 rounded-3xl p-7 transition-all duration-300 hover:shadow-xl cursor-pointer"
+              className="group bg-slate-900 border border-white/5 hover:border-white/15 rounded-3xl p-7 transition-all duration-300 hover:shadow-xl cursor-pointer animate-fadeInUp"
               onClick={onGetStarted}
             >
               <div className={`w-12 h-12 rounded-2xl ${f.bg} flex items-center justify-center mb-5`}>
@@ -244,6 +260,33 @@ export default function LandingPage({ onGetStarted, onLogin }) {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Pakistan Education Levels ────────────────────────────── */}
+      <section className="px-6 md:px-12 py-16 max-w-5xl mx-auto">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-3">
+            Designed for <span className="text-blue-400">Every Pakistani Learner</span>
+          </h2>
+          <p className="text-slate-400">From Class 1 to PhD — EduAI supports your entire education journey</p>
+        </div>
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3">
+          {[
+            { label: 'Class 1-5', emoji: '📚', color: 'from-emerald-500 to-teal-600' },
+            { label: 'Class 6-8', emoji: '✏️', color: 'from-blue-500 to-cyan-600' },
+            { label: 'Matric', emoji: '🎓', color: 'from-violet-500 to-purple-600' },
+            { label: 'FSc / FA', emoji: '🔬', color: 'from-rose-500 to-pink-600' },
+            { label: 'BA / BS', emoji: '🏛️', color: 'from-amber-500 to-orange-500' },
+            { label: 'Masters / MPhil', emoji: '📖', color: 'from-blue-600 to-indigo-700' },
+            { label: 'PhD / Teachers', emoji: '🏆', color: 'from-slate-600 to-slate-800' },
+          ].map(l => (
+            <button key={l.label} onClick={onGetStarted}
+              className="flex flex-col items-center gap-2 p-4 bg-slate-900 border border-white/10 rounded-2xl hover:border-blue-500/40 hover:bg-slate-800 transition-all duration-200 text-center">
+              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${l.color} flex items-center justify-center text-xl`}>{l.emoji}</div>
+              <span className="text-xs font-medium text-slate-300 leading-tight">{l.label}</span>
+            </button>
+          ))}
         </div>
       </section>
 

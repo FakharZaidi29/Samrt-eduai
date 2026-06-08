@@ -113,9 +113,9 @@ function StatCard({ label, value, unit, change, progress, icon: Icon, color, gra
   );
 }
 
-function LessonCard({ lesson }) {
+function LessonCard({ lesson, onStart }) {
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-slate-100 dark:border-zinc-800 overflow-hidden hover:border-slate-200 dark:hover:border-zinc-700 hover:shadow-md transition-all duration-300 group cursor-pointer">
+    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-slate-100 dark:border-zinc-800 overflow-hidden hover:border-blue-200 dark:hover:border-blue-900/50 hover:shadow-md transition-all duration-300 group cursor-pointer">
       <div className={`h-1.5 bg-gradient-to-r ${lesson.gradient}`} />
       <div className="p-5">
         <div className="flex items-center justify-between mb-2">
@@ -154,13 +154,13 @@ function LessonCard({ lesson }) {
                 style={{ width: `${lesson.progress}%` }}
               />
             </div>
-            <button className="w-full py-2 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl hover:bg-red-100 dark:hover:bg-red-900/40 transition-colors flex items-center justify-center gap-1.5">
+            <button onClick={() => onStart(lesson)} className="w-full py-2 text-xs font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center gap-1.5">
               <Play size={11} fill="currentColor" />
               Continue Learning
             </button>
           </div>
         ) : (
-          <button className="w-full py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-zinc-800 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-700 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center justify-center gap-1.5">
+          <button onClick={() => onStart(lesson)} className="w-full py-2 text-xs font-semibold text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-zinc-800 rounded-xl hover:bg-slate-100 dark:hover:bg-zinc-700 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center justify-center gap-1.5">
             <Play size={11} />
             Start Learning
           </button>
@@ -172,7 +172,7 @@ function LessonCard({ lesson }) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export default function Dashboard({ setActiveView }) {
+export default function Dashboard({ setActiveView, goToChat }) {
   const { user } = useAuth();
   const [stats, setStats] = useState(null);
   const [statsLoading, setStatsLoading] = useState(true);
@@ -271,7 +271,7 @@ export default function Dashboard({ setActiveView }) {
               <div className="flex flex-wrap gap-3 mt-5">
                 <button
                   onClick={() => setActiveView('chat')}
-                  className="bg-white text-red-700 text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-red-50 transition-colors flex items-center gap-2 shadow-sm shadow-black/20"
+                  className="bg-white text-blue-700 text-sm font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-50 transition-colors flex items-center gap-2 shadow-sm shadow-black/20"
                 >
                   <Brain size={16} />
                   Start AI Session
@@ -363,7 +363,9 @@ export default function Dashboard({ setActiveView }) {
               </button>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {LESSONS.map((lesson, i) => <LessonCard key={i} lesson={lesson} />)}
+              {LESSONS.map((lesson, i) => (
+                <LessonCard key={i} lesson={lesson} onStart={(l) => goToChat ? goToChat(`${l.title} (${l.subject})`) : setActiveView('chat')} />
+              ))}
             </div>
           </div>
         </div>

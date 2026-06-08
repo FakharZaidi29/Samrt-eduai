@@ -373,7 +373,7 @@ function timeAgo(dateStr) {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
-export default function ChatInterface() {
+export default function ChatInterface({ initialTopic, onTopicConsumed }) {
   const { user } = useAuth();
   const initials = getInitials(user?.name);
 
@@ -386,6 +386,7 @@ export default function ChatInterface() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const pendingTopicRef = useRef(null);
 
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -419,6 +420,46 @@ export default function ChatInterface() {
       setSessionsLoading(false);
     }
   };
+
+  // Auto-start lesson topic from Dashboard
+  useEffect(() => {
+    if (!initialTopic) return;
+    pendingTopicRef.current = initialTopic;
+    if (onTopicConsumed) onTopicConsumed();
+    (async () => {
+      try {
+        const session = await api.chat.createSession(initialTopic);
+        const newSession = { _id: session._id, title: initialTopic, updatedAt: session.updatedAt, preview: '', messageCount: 0 };
+        setSessions(prev => [newSession, ...prev]);
+        setActiveSessionId(session._id);
+        setMessages([]);
+        setSessionTitle(initialTopic);
+        // send auto message after a tick so state is ready
+        setTimeout(async () => {
+          const topic = pendingTopicRef.current;
+          pendingTopicRef.current = null;
+          if (!topic) return;
+          const prompt = `Please teach me about: ${topic}\n\nGive me a comprehensive lesson with:\n1. Clear explanation with key concepts\n2. Examples and applications\n3. Diagrams or visual aids where helpful\n4. Practice questions at the end`;
+          setIsTyping(true);
+          setMessages([{ role: 'user', content: prompt }]);
+          try {
+            const data = await api.chat.sendMessage(session._id, prompt);
+            setMessages([
+              { role: 'user', content: prompt },
+              { role: 'assistant', content: data.message.content },
+            ]);
+            setSessions(prev => prev.map(s => s._id === session._id ? { ...s, title: topic, preview: data.message.content.slice(0, 80) } : s));
+          } catch (err) {
+            console.error('Auto lesson send error:', err.message);
+          } finally {
+            setIsTyping(false);
+          }
+        }, 100);
+      } catch (err) {
+        console.error('Auto lesson session error:', err.message);
+      }
+    })();
+  }, [initialTopic]);
 
   const loadMessages = useCallback(async (sessionId) => {
     setMessagesLoading(true);
