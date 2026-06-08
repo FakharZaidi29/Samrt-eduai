@@ -28,6 +28,7 @@ const TEAM = [
   { name: 'Muniba', role: 'Content Strategist', emoji: '✍️', color: 'from-emerald-500 to-teal-600' },
   { name: 'Arifa', role: 'Research Lead', emoji: '🔬', color: 'from-amber-500 to-orange-500' },
   { name: 'Sajjadullah', role: 'Backend Developer', emoji: '🛠️', color: 'from-cyan-500 to-blue-600' },
+  { name: 'Abdul Rehman', role: 'QA & Testing', emoji: '🧪', color: 'from-slate-500 to-slate-700' },
 ];
 import { useAuth } from '../context/AuthContext.jsx';
 import { api } from '../services/api.js';
@@ -429,7 +430,7 @@ export default function Dashboard({ setActiveView, goToChat }) {
             <Users size={13} className="text-slate-400" />
             <span className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Meet the Team</span>
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-7 gap-3">
             {TEAM.map((member) => (
               <div key={member.name} className="flex flex-col items-center gap-2 p-3 bg-white dark:bg-zinc-900 rounded-xl border border-slate-100 dark:border-zinc-800 text-center hover:shadow-sm transition-shadow">
                 <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${member.color} flex items-center justify-center text-lg shadow-sm`}>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80">
+  <defs>
+    <linearGradient id="bg2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="cap2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#bfdbfe"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon box -->
+  <rect x="0" y="0" width="80" height="80" rx="18" fill="url(#bg2)"/>
+
+  <!-- Graduation cap on icon -->
+  <polygon points="40,18 62,30 40,42 18,30" fill="url(#cap2)"/>
+  <rect x="32" y="30" width="16" height="14" rx="3" fill="white" opacity="0.95"/>
+  <line x1="62" y1="30" x2="62" y2="48" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.75"/>
+  <circle cx="62" cy="52" r="4.5" fill="white" opacity="0.75"/>
+  <line x1="59" y1="55" x2="56" y2="65" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <line x1="62" y1="56" x2="62" y2="66" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <line x1="65" y1="55" x2="68" y2="65" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+
+  <!-- AI sparkle on icon -->
+  <g transform="translate(66,14)" opacity="0.75">
+    <path d="M0,-8 L2,-2 L8,0 L2,2 L0,8 L-2,2 L-8,0 L-2,-2 Z" fill="white"/>
+  </g>
+
+  <!-- "EduAI" text -->
+  <text x="96" y="48" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="36"
+    fill="#1e293b" letter-spacing="-1">Edu</text>
+  <text x="178" y="48" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="36"
+    fill="#2563eb" letter-spacing="-1">AI</text>
+
+  <!-- Tagline -->
+  <text x="96" y="65" font-family="Inter, Arial, sans-serif" font-weight="400" font-size="13"
+    fill="#64748b" letter-spacing="0.5">Smart Learning Platform 🇵🇰</text>
+</svg>

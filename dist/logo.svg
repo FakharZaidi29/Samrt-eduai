@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1e3a8a"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#bfdbfe"/>
+    </linearGradient>
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="10" result="blur"/>
+      <feOffset dx="0" dy="4" result="shifted"/>
+      <feComposite in="SourceGraphic" in2="shifted" operator="over"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="108" fill="url(#bg)"/>
+
+  <!-- Subtle inner glow -->
+  <circle cx="256" cy="210" r="200" fill="#60a5fa" opacity="0.10"/>
+
+  <!-- Background grid dots -->
+  <circle cx="68" cy="68" r="7" fill="white" opacity="0.07"/>
+  <circle cx="256" cy="52" r="5" fill="white" opacity="0.06"/>
+  <circle cx="444" cy="68" r="7" fill="white" opacity="0.07"/>
+  <circle cx="68" cy="444" r="7" fill="white" opacity="0.07"/>
+  <circle cx="444" cy="444" r="7" fill="white" opacity="0.07"/>
+  <circle cx="68" cy="256" r="5" fill="white" opacity="0.05"/>
+  <circle cx="444" cy="256" r="5" fill="white" opacity="0.05"/>
+
+  <!-- Neural-network lines (subtle) -->
+  <line x1="68" y1="68" x2="256" y2="52" stroke="white" stroke-width="1.5" opacity="0.06"/>
+  <line x1="256" y1="52" x2="444" y2="68" stroke="white" stroke-width="1.5" opacity="0.06"/>
+  <line x1="68" y1="68" x2="68" y2="256" stroke="white" stroke-width="1.5" opacity="0.05"/>
+  <line x1="444" y1="68" x2="444" y2="256" stroke="white" stroke-width="1.5" opacity="0.05"/>
+
+  <!-- ─── GRADUATION CAP ─────────────────────────────────── -->
+
+  <!-- Mortarboard top (diamond) -->
+  <polygon points="256,118 406,196 256,274 106,196"
+    fill="url(#cap)" filter="url(#soft)"/>
+
+  <!-- Shadow under board -->
+  <ellipse cx="256" cy="278" rx="110" ry="10" fill="#1e3a8a" opacity="0.25"/>
+
+  <!-- Cap cylinder/body -->
+  <rect x="210" y="196" width="92" height="88" rx="12" fill="white" opacity="0.96"/>
+
+  <!-- Tassel cord -->
+  <line x1="406" y1="196" x2="406" y2="308"
+    stroke="white" stroke-width="8" stroke-linecap="round" opacity="0.80"/>
+
+  <!-- Tassel ball -->
+  <circle cx="406" cy="322" r="18" fill="white" opacity="0.80"/>
+
+  <!-- Tassel threads -->
+  <line x1="397" y1="328" x2="388" y2="354" stroke="white" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
+  <line x1="406" y1="330" x2="406" y2="358" stroke="white" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
+  <line x1="415" y1="328" x2="424" y2="354" stroke="white" stroke-width="4" stroke-linecap="round" opacity="0.65"/>
+
+  <!-- ─── AI SPARKLE (top-right) ───────────────────────── -->
+  <g transform="translate(424,82)" opacity="0.80">
+    <path d="M0,-22 L5,-5 L22,0 L5,5 L0,22 L-5,5 L-22,0 L-5,-5 Z" fill="white"/>
+  </g>
+
+  <!-- Small secondary sparkle -->
+  <g transform="translate(92,400)" opacity="0.40">
+    <path d="M0,-14 L3,-3 L14,0 L3,3 L0,14 L-3,3 L-14,0 L-3,-3 Z" fill="white"/>
+  </g>
+
+  <!-- Tiny dot accent -->
+  <circle cx="152" cy="370" r="5" fill="white" opacity="0.25"/>
+  <circle cx="136" cy="390" r="3" fill="white" opacity="0.20"/>
+
+  <!-- ─── PAKISTAN GREEN ACCENT ─────────────────────────── -->
+  <path d="M0,480 L0,512 Q0,512 108,512 L404,512 Q512,512 512,512 L512,480 Z"
+    fill="#16a34a" opacity="0.45"/>
+
+  <!-- Small crescent hint on green bar -->
+  <circle cx="256" cy="496" r="9" fill="white" opacity="0.30"/>
+  <circle cx="261" cy="496" r="6.5" fill="#16a34a" opacity="0.45"/>
+</svg>
