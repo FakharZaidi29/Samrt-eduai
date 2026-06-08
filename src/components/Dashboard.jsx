@@ -22,13 +22,14 @@ import {
 } from 'lucide-react';
 
 const TEAM = [
-  { name: 'Ahsan Ali', role: 'Lead Developer', emoji: '💻', color: 'from-blue-500 to-blue-700' },
-  { name: 'Muskan', role: 'UI/UX Designer', emoji: '🎨', color: 'from-pink-500 to-rose-600' },
-  { name: 'Faryal', role: 'Frontend Developer', emoji: '⚡', color: 'from-violet-500 to-purple-600' },
-  { name: 'Muniba', role: 'Content Strategist', emoji: '✍️', color: 'from-emerald-500 to-teal-600' },
+  { name: 'Fakhar Abbas', role: 'Team Lead & Full Stack Developer', emoji: '💻', color: 'from-blue-500 to-blue-700' },
+ { name: 'Muniba', role: 'Frontend Developer', emoji: '✍️', color: 'from-emerald-500 to-teal-600' },
+  { name: 'Muskan', role: 'Product Manager', emoji: '⚡', color: 'from-pink-500 to-rose-600' },
+  { name: 'Faryal', role: 'UI/UX Designer', emoji: '🎨', color: 'from-violet-500 to-purple-600' },
+  
   { name: 'Arifa', role: 'Research Lead', emoji: '🔬', color: 'from-amber-500 to-orange-500' },
-  { name: 'Sajjadullah', role: 'Backend Developer', emoji: '🛠️', color: 'from-cyan-500 to-blue-600' },
-  { name: 'Abdul Rehman', role: 'QA & Testing', emoji: '🧪', color: 'from-slate-500 to-slate-700' },
+  { name: 'Sajaullah', role: 'Testing Engineer', emoji: '🛠️', color: 'from-cyan-500 to-blue-600' },
+  { name: 'Abdul Rehman', role: 'QA Engineer', emoji: '🧪', color: 'from-slate-500 to-slate-700' },
 ];
 import { useAuth } from '../context/AuthContext.jsx';
 import { api } from '../services/api.js';
