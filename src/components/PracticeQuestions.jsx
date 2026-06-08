@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { PenTool, Send, Loader2, CheckCircle2, Star, RotateCcw, ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 import { api } from '../services/api.js';
+import { useLanguage } from '../context/LanguageContext.jsx';
 
 const SUBJECTS = [
   { id: 'math', label: 'Mathematics', emoji: '📐' },
@@ -56,6 +57,7 @@ function ReviewCard({ item, index }) {
 }
 
 export default function PracticeQuestions() {
+  const { t } = useLanguage();
   const [subject, setSubject] = useState('');
   const [level, setLevel] = useState('matric');
   const [topic, setTopic] = useState('');
@@ -165,13 +167,13 @@ FEEDBACK: [2-3 sentences of constructive feedback]`;
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mx-auto mb-4 shadow-lg animate-float">
               <PenTool size={28} className="text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Practice Questions</h1>
-            <p className="text-slate-500 dark:text-slate-400 mt-1">AI generates questions, you answer, AI reviews & explains</p>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('practiceQuestions')}</h1>
+            <p className="text-slate-500 dark:text-slate-400 mt-1">{t('practiceSetup')}</p>
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 rounded-2xl p-6 space-y-5">
             <div>
-              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Your Level</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">{t('selectLevel')}</p>
               <div className="flex flex-wrap gap-2">
                 {LEVELS.map(l => (
                   <button key={l.id} onClick={() => setLevel(l.id)}
@@ -183,7 +185,7 @@ FEEDBACK: [2-3 sentences of constructive feedback]`;
             </div>
 
             <div>
-              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Subject</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">{t('selectSubject')}</p>
               <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                 {SUBJECTS.map(s => (
                   <button key={s.id} onClick={() => setSubject(s.id)}
@@ -204,7 +206,7 @@ FEEDBACK: [2-3 sentences of constructive feedback]`;
 
             <button onClick={generate} disabled={!subject || loading}
               className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 shadow-lg">
-              {loading ? <><Loader2 size={18} className="animate-spin" /> Generating…</> : <><Sparkles size={18} /> Generate 5 Questions</>}
+              {loading ? <><Loader2 size={18} className="animate-spin" /> {t('generating')}</> : <><Sparkles size={18} /> {t('generateQuestions')}</>}
             </button>
           </div>
         </div>
@@ -230,7 +232,7 @@ FEEDBACK: [2-3 sentences of constructive feedback]`;
               <textarea
                 value={answers[i] || ''}
                 onChange={e => setAnswers(prev => ({ ...prev, [i]: e.target.value }))}
-                placeholder="Write your answer here…"
+                placeholder={t('yourAnswer')}
                 rows={3}
                 className="w-full px-3 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-blue-400 resize-none transition-all"
               />
@@ -240,7 +242,7 @@ FEEDBACK: [2-3 sentences of constructive feedback]`;
 
           <button onClick={submitAll} disabled={reviewing || Object.keys(answers).filter(k => answers[k]?.trim()).length === 0}
             className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 disabled:opacity-50 shadow-md">
-            {reviewing ? <><Loader2 size={16} className="animate-spin" /> AI is reviewing…</> : <><Send size={16} /> Submit for AI Review</>}
+            {reviewing ? <><Loader2 size={16} className="animate-spin" /> {t('aiIsThinking')}</> : <><Send size={16} /> {t('submitAnswers')}</>}
           </button>
         </div>
       </div>
@@ -252,7 +254,7 @@ FEEDBACK: [2-3 sentences of constructive feedback]`;
       <div className="p-6 max-w-2xl mx-auto space-y-5 pb-10 animate-fadeIn">
         <div className="text-center bg-gradient-to-br from-slate-900 to-blue-950 rounded-3xl p-6 text-white">
           <div className="text-4xl font-extrabold mb-1">{avgRating} / 5</div>
-          <div className="text-slate-300">Average Rating</div>
+          <div className="text-slate-300">{t('avgRating')}</div>
           <div className="flex items-center justify-center gap-1 mt-2">
             {[1,2,3,4,5].map(n => (
               <Star key={n} size={18} fill={n <= Math.round(avgRating) ? '#fbbf24' : 'transparent'} className={n <= Math.round(avgRating) ? 'text-amber-400' : 'text-slate-600'} />
@@ -266,7 +268,7 @@ FEEDBACK: [2-3 sentences of constructive feedback]`;
 
         <button onClick={reset}
           className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl flex items-center justify-center gap-2 shadow-md">
-          <RotateCcw size={16} /> Practice Again
+          <RotateCcw size={16} /> {t('newPractice')}
         </button>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Check, Zap, Crown, Sparkles, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useLanguage } from '../context/LanguageContext.jsx';
 
 const PLANS = [
   {
@@ -127,6 +128,7 @@ function PlanCard({ plan, isActive, onSelect }) {
 
 export default function Pricing({ setActiveView }) {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [selected, setSelected] = useState(null);
 
   const handleSelect = (planId) => {
@@ -138,13 +140,13 @@ export default function Pricing({ setActiveView }) {
       <div className="p-6 max-w-5xl mx-auto pb-16 animate-fadeIn">
         <button onClick={() => setActiveView('dashboard')}
           className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white mb-6 transition-colors">
-          <ArrowLeft size={16} /> Back to Dashboard
+          <ArrowLeft size={16} /> {t('dashboard')}
         </button>
 
         <div className="text-center mb-10">
-          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3">Choose Your Plan</h1>
+          <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3">{t('choosePlan')}</h1>
           <p className="text-slate-500 dark:text-slate-400 max-w-md mx-auto">
-            Unlock the full power of AI-powered education tailored for Pakistani students & teachers
+            {t('pricingDesc')}
           </p>
         </div>
 
@@ -167,7 +169,7 @@ export default function Pricing({ setActiveView }) {
 
         {selected && selected !== 'free' && (
           <div className="mt-8 p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-2xl text-center animate-fadeIn">
-            <h3 className="font-bold text-slate-900 dark:text-white mb-2">Payment Coming Soon!</h3>
+            <h3 className="font-bold text-slate-900 dark:text-white mb-2">{t('paymentSoon')}</h3>
             <p className="text-sm text-slate-600 dark:text-slate-400">
               Online payment for the <strong>{PLANS.find(p => p.id === selected)?.name}</strong> plan will be available soon.
               For now, contact us at <strong>support@eduai.pk</strong> to activate your upgrade.

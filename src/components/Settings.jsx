@@ -85,7 +85,7 @@ function SectionCard({ title, icon: Icon, children }) {
 
 export default function Settings({ darkMode, setDarkMode }) {
   const { user, updateUser } = useAuth();
-  const { lang, setLang } = useLanguage();
+  const { lang, setLang, t } = useLanguage();
 
   const [name, setName] = useState(user?.name || '');
   const [eduLevel, setEduLevel] = useState(user?.settings?.educationLevel || 'Matric (9-10)');
@@ -149,8 +149,8 @@ export default function Settings({ darkMode, setDarkMode }) {
         </div>
 
         {/* Profile */}
-        <SectionCard title="Profile" icon={User}>
-          <SettingRow label="Full Name" description="Your display name across the platform">
+        <SectionCard title={t('profile')} icon={User}>
+          <SettingRow label={t('yourName')} description={t('yourName')}>
             <input
               type="text"
               value={name}
@@ -158,7 +158,7 @@ export default function Settings({ darkMode, setDarkMode }) {
               className="w-40 px-3 py-1.5 text-sm bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl text-slate-900 dark:text-white outline-none focus:border-blue-400 dark:focus:border-blue-600 transition-colors"
             />
           </SettingRow>
-          <SettingRow label="Email" description="Used for login and notifications">
+          <SettingRow label={t('emailAddress')} description={t('emailAddress')}>
             <input
               type="email"
               defaultValue={user?.email || ''}
@@ -166,7 +166,7 @@ export default function Settings({ darkMode, setDarkMode }) {
               className="w-44 px-3 py-1.5 text-sm bg-slate-100 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 rounded-xl text-slate-500 dark:text-slate-400 outline-none cursor-not-allowed"
             />
           </SettingRow>
-          <SettingRow label="Education Level" description="Your current class / degree level in Pakistan">
+          <SettingRow label={t('educationLevel')} description={t('educationLevel')}>
             <select
               value={eduLevel}
               onChange={e => setEduLevel(e.target.value)}
@@ -175,7 +175,7 @@ export default function Settings({ darkMode, setDarkMode }) {
               {['Class 1-5 (Primary)','Class 6-8 (Middle)','Matric (9-10)','FSc / FA (11-12)','BA / BS','Masters / MPhil','PhD','Teacher / Educator'].map(l => <option key={l}>{l}</option>)}
             </select>
           </SettingRow>
-          <SettingRow label="Language / زبان" description="App display language and AI response language">
+          <SettingRow label={t('language')} description={t('langDesc')}>
             <select
               value={language}
               onChange={(e) => setLanguage(e.target.value)}
@@ -188,8 +188,8 @@ export default function Settings({ darkMode, setDarkMode }) {
         </SectionCard>
 
         {/* Appearance */}
-        <SectionCard title="Appearance" icon={Palette}>
-          <SettingRow label="Dark Mode" description="Switch between light and dark theme">
+        <SectionCard title={t('appearance')} icon={Palette}>
+          <SettingRow label={t('darkMode')} description={t('darkModeDesc')}>
             <ToggleSwitch enabled={darkMode} onChange={handleDarkModeToggle} />
           </SettingRow>
           <SettingRow label="Sound Effects" description="Play sounds on actions and notifications">
@@ -198,24 +198,24 @@ export default function Settings({ darkMode, setDarkMode }) {
         </SectionCard>
 
         {/* Notifications */}
-        <SectionCard title="Notifications" icon={Bell}>
-          <SettingRow label="Email Notifications" description="Receive updates via email">
+        <SectionCard title={t('notifications')} icon={Bell}>
+          <SettingRow label={t('emailNotifs')} description={t('emailNotifsDesc')}>
             <ToggleSwitch enabled={notifs.email} onChange={(v) => setNotifs((p) => ({ ...p, email: v }))} />
           </SettingRow>
-          <SettingRow label="Push Notifications" description="Browser push alerts">
+          <SettingRow label={t('pushNotifs')} description={t('pushNotifsDesc')}>
             <ToggleSwitch enabled={notifs.push} onChange={(v) => setNotifs((p) => ({ ...p, push: v }))} />
           </SettingRow>
-          <SettingRow label="Study Reminders" description="Daily reminder to study">
+          <SettingRow label={t('studyReminders')} description={t('studyRemindersDesc')}>
             <ToggleSwitch enabled={notifs.reminders} onChange={(v) => setNotifs((p) => ({ ...p, reminders: v }))} />
           </SettingRow>
-          <SettingRow label="Weekly Report" description="Get your weekly progress summary">
+          <SettingRow label={t('weeklyReport')} description={t('weeklyReportDesc')}>
             <ToggleSwitch enabled={notifs.weekly} onChange={(v) => setNotifs((p) => ({ ...p, weekly: v }))} />
           </SettingRow>
         </SectionCard>
 
         {/* AI Preferences */}
-        <SectionCard title="AI Preferences" icon={Zap}>
-          <SettingRow label="AI Model" description="Choose the model powering your tutor">
+        <SectionCard title={t('aiPreferences')} icon={Zap}>
+          <SettingRow label={t('aiModel')} description={t('aiModelDesc')}>
             <select
               value={aiModel}
               onChange={(e) => setAiModel(e.target.value)}
@@ -226,32 +226,32 @@ export default function Settings({ darkMode, setDarkMode }) {
               <option value="claude-haiku-4-5">Claude Haiku 4.5 (Lite)</option>
             </select>
           </SettingRow>
-          <SettingRow label="Auto-save Notes" description="Automatically save AI-generated notes">
+          <SettingRow label={t('autoSaveNotes')} description={t('autoSaveDesc')}>
             <ToggleSwitch enabled={autoSave} onChange={setAutoSave} />
           </SettingRow>
         </SectionCard>
 
         {/* Security */}
-        <SectionCard title="Security" icon={Shield}>
-          <SettingRow label="Change Password" description="Update your account password">
-            <button className="text-xs font-semibold text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-xl border border-red-200 dark:border-red-900/40 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-              Change
+        <SectionCard title={t('security')} icon={Shield}>
+          <SettingRow label={t('changePassword')} description={t('changePasswordDesc')}>
+            <button className="text-xs font-semibold text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-xl border border-blue-200 dark:border-blue-900/40 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+              {t('changePassword')}
             </button>
           </SettingRow>
-          <SettingRow label="Two-Factor Authentication" description="Add an extra layer of security">
+          <SettingRow label={t('twoFactor')} description={t('twoFactorDesc')}>
             <button className="text-xs font-semibold text-slate-600 dark:text-slate-400 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-100 dark:hover:bg-zinc-800 transition-colors">
               Enable
             </button>
           </SettingRow>
-          <SettingRow label="Delete Account" description="Permanently remove your account and data">
-            <button className="text-xs font-semibold text-blue-600 dark:text-blue-400 px-3 py-1.5 rounded-xl border border-red-200 dark:border-red-900/40 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
-              Delete
+          <SettingRow label={t('deleteAccount')} description={t('deleteAccountDesc')}>
+            <button className="text-xs font-semibold text-red-600 dark:text-red-400 px-3 py-1.5 rounded-xl border border-red-200 dark:border-red-900/40 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+              {t('deleteAccount')}
             </button>
           </SettingRow>
         </SectionCard>
 
         {/* Support */}
-        <SectionCard title="Support" icon={HeadphonesIcon}>
+        <SectionCard title={t('support')} icon={HeadphonesIcon}>
           <div className="px-5 py-4 space-y-3">
             <p className="text-xs text-slate-500 dark:text-slate-400">Having trouble? Reach out to our team — we're here to help.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -263,7 +263,7 @@ export default function Settings({ darkMode, setDarkMode }) {
                   <Mail size={14} className="text-white" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-slate-900 dark:text-white">Email Support</p>
+                  <p className="text-xs font-semibold text-slate-900 dark:text-white">{t('emailSupport')}</p>
                   <p className="text-[11px] text-slate-500 dark:text-slate-400">support@eduai.pk</p>
                 </div>
                 <ExternalLink size={12} className="ml-auto text-slate-300 group-hover:text-blue-400 transition-colors" />
@@ -276,15 +276,15 @@ export default function Settings({ darkMode, setDarkMode }) {
                   <MessageSquare size={14} className="text-white" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold text-slate-900 dark:text-white">WhatsApp</p>
-                  <p className="text-[11px] text-slate-500 dark:text-slate-400">Chat with us directly</p>
+                  <p className="text-xs font-semibold text-slate-900 dark:text-white">{t('whatsapp')}</p>
+                  <p className="text-[11px] text-slate-500 dark:text-slate-400">{t('chatWithUs')}</p>
                 </div>
                 <ExternalLink size={12} className="ml-auto text-slate-300 group-hover:text-emerald-400 transition-colors" />
               </button>
             </div>
 
             <div className="mt-4">
-              <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Frequently Asked Questions</p>
+              <p className="text-[11px] font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">{t('faq')}</p>
               {FAQS.map((faq) => <FaqItem key={faq.q} q={faq.q} a={faq.a} />)}
             </div>
 
@@ -307,7 +307,7 @@ export default function Settings({ darkMode, setDarkMode }) {
         {saveSuccess && (
           <div className="px-4 py-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-900/40 rounded-xl">
             <p className="text-sm text-emerald-600 dark:text-emerald-400 flex items-center gap-2">
-              <Check size={14} /> Settings saved successfully!
+              <Check size={14} /> {t('saved')}
             </p>
           </div>
         )}
@@ -321,12 +321,12 @@ export default function Settings({ darkMode, setDarkMode }) {
           {saving ? (
             <>
               <Loader2 size={16} className="animate-spin" />
-              Saving…
+              {t('saving')}
             </>
           ) : (
             <>
               <Check size={16} />
-              Save Changes
+              {t('saveChanges')}
             </>
           )}
         </button>

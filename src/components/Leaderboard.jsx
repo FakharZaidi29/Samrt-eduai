@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Trophy, RotateCcw, ArrowLeft, Loader2, Star, Medal } from 'lucide-react';
 import { api } from '../services/api.js';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useLanguage } from '../context/LanguageContext.jsx';
 
 const SUBJECTS_FILTER = [
   { id: 'all', label: 'All Subjects' },
@@ -29,6 +30,7 @@ const GRADE_COLOR = {
 
 export default function Leaderboard({ onBack, onNewQuiz }) {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [results, setResults] = useState([]);
   const [myResults, setMyResults] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -70,23 +72,23 @@ export default function Leaderboard({ onBack, onNewQuiz }) {
           )}
           <div>
             <h1 className="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Trophy size={20} className="text-amber-500" /> Leaderboard
+              <Trophy size={20} className="text-amber-500" /> {t('leaderboard')}
             </h1>
-            <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">Top quiz scores</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">{t('podium')}</p>
           </div>
           {onNewQuiz && (
             <button onClick={onNewQuiz} className="ml-auto flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-xl bg-blue-600 text-white hover:bg-blue-500 transition-colors">
-              <RotateCcw size={13} /> New Quiz
+              <RotateCcw size={13} /> {t('backToQuiz')}
             </button>
           )}
         </div>
 
         {/* Tabs */}
         <div className="flex gap-2">
-          {[{ id: 'global', label: '🌍 Global' }, { id: 'mine', label: '👤 My Scores' }].map(t => (
-            <button key={t.id} onClick={() => setTab(t.id)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${tab === t.id ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200'}`}>
-              {t.label}
+          {[{ id: 'global', label: `🌍 ${t('global')}` }, { id: 'mine', label: `👤 ${t('myScores')}` }].map(item => (
+            <button key={item.id} onClick={() => setTab(item.id)}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${tab === item.id ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200'}`}>
+              {item.label}
             </button>
           ))}
         </div>
@@ -97,7 +99,7 @@ export default function Leaderboard({ onBack, onNewQuiz }) {
             {SUBJECTS_FILTER.map(s => (
               <button key={s.id} onClick={() => setFilter(s.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-all ${filter === s.id ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-zinc-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200'}`}>
-                {s.label}
+                {s.id === 'all' ? t('allSubjects') : s.label}
               </button>
             ))}
           </div>
@@ -108,7 +110,7 @@ export default function Leaderboard({ onBack, onNewQuiz }) {
         ) : list.length === 0 ? (
           <div className="text-center py-12">
             <Trophy size={32} className="text-slate-300 dark:text-slate-600 mx-auto mb-3" />
-            <p className="text-slate-500 dark:text-slate-400 text-sm">No results yet. Take a quiz to appear here!</p>
+            <p className="text-slate-500 dark:text-slate-400 text-sm">{t('noScores')}</p>
           </div>
         ) : (
           <div className="space-y-2">

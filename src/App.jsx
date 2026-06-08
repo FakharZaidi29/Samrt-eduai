@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext.jsx';
-import { LanguageProvider } from './context/LanguageContext.jsx';
+import { LanguageProvider, useLanguage } from './context/LanguageContext.jsx';
 import { useNotifications } from './hooks/useNotifications.js';
 import { useOffline } from './hooks/useOffline.js';
 import Layout from './components/Layout';
@@ -20,6 +20,7 @@ import { Loader2, WifiOff } from 'lucide-react';
 
 function AppInner() {
   const { user, loading } = useAuth();
+  const { t } = useLanguage();
   const [activeView, setActiveView] = useState('dashboard');
 
   // Handle /reset-password/:token URL
@@ -76,7 +77,7 @@ function AppInner() {
       {offline && (
         <div className="flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white text-sm font-medium z-50 flex-shrink-0">
           <WifiOff size={15} />
-          <span>No internet connection — some features may not work</span>
+          <span>{t('offlineBanner')}</span>
         </div>
       )}
       <div className="flex-1 min-h-0">

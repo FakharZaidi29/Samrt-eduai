@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Trophy, Brain, Send, Loader2, CheckCircle2, XCircle, Star, ArrowRight, RotateCcw, Zap, BarChart3 } from 'lucide-react';
 import { api } from '../services/api.js';
+import { useLanguage } from '../context/LanguageContext.jsx';
 import Leaderboard from './Leaderboard.jsx';
 
 const SUBJECTS = [
@@ -23,6 +24,7 @@ const LEVELS = [
 ];
 
 export default function CompetitionMode() {
+  const { t } = useLanguage();
   const [phase, setPhase] = useState('setup'); // setup | quiz | result | leaderboard
   const [subject, setSubject] = useState('');
   const [level, setLevel] = useState('matric');
@@ -158,13 +160,13 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg animate-float">
               <Trophy size={30} className="text-white" />
             </div>
-            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">Challenge Mode</h1>
-            <p className="text-slate-500 dark:text-slate-400 mt-1">Test your knowledge — AI will grade your answers</p>
+            <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('challengeModeTitle')}</h1>
+            <p className="text-slate-500 dark:text-slate-400 mt-1">{t('quizSetup')}</p>
           </div>
 
           <div className="bg-white dark:bg-zinc-900 border border-slate-100 dark:border-zinc-800 rounded-2xl p-6 space-y-5">
             <div>
-              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Select Your Level</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">{t('selectLevel')}</p>
               <div className="flex flex-wrap gap-2">
                 {LEVELS.map(l => (
                   <button key={l.id} onClick={() => setLevel(l.id)}
@@ -176,7 +178,7 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
             </div>
 
             <div>
-              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Choose Subject</p>
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">{t('selectSubject')}</p>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {SUBJECTS.map(s => (
                   <button key={s.id} onClick={() => setSubject(s.id)}
@@ -190,7 +192,7 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
 
             <button onClick={startQuiz} disabled={!subject || loading}
               className="w-full py-3.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold rounded-xl transition-all shadow-lg shadow-blue-900/30 disabled:opacity-50 flex items-center justify-center gap-2">
-              {loading ? <><Loader2 size={18} className="animate-spin" /> Generating Questions…</> : <><Zap size={18} /> Start 5-Question Quiz</>}
+              {loading ? <><Loader2 size={18} className="animate-spin" /> {t('generatingQuiz')}</> : <><Zap size={18} /> {t('startQuiz')}</>}
             </button>
           </div>
         </div>
@@ -206,7 +208,7 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
         <div className="p-6 max-w-2xl mx-auto space-y-5 pb-10">
           {/* Progress */}
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">Question {current + 1} of {questions.length}</span>
+            <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">{t('question')} {current + 1} {t('of2')} {questions.length}</span>
             <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">Score: {score}/{current * 10}</span>
           </div>
           <div className="w-full h-2 bg-slate-100 dark:bg-zinc-800 rounded-full overflow-hidden">
@@ -221,7 +223,7 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
                 {prev.marks >= 7 ? <CheckCircle2 size={16} className="text-emerald-500" /> : <XCircle size={16} className="text-red-500" />}
                 <span className="text-sm font-bold">{prev.verdict} — {prev.marks}/10 marks</span>
               </div>
-              {prev.correct && <p className="text-xs text-slate-600 dark:text-slate-400 mt-1"><strong>Correct:</strong> {prev.correct}</p>}
+              {prev.correct && <p className="text-xs text-slate-600 dark:text-slate-400 mt-1"><strong>{t('correct')}:</strong> {prev.correct}</p>}
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">{prev.explanation}</p>
             </div>
           )}
@@ -230,19 +232,19 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
           <div className="bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-2xl p-6 animate-fadeIn">
             <div className="flex items-center gap-2 mb-3">
               <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white text-sm font-bold">{current + 1}</div>
-              <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wide">Question</span>
+              <span className="text-xs font-semibold text-blue-600 dark:text-blue-400 uppercase tracking-wide">{t('question')}</span>
             </div>
             <p className="text-base font-semibold text-slate-900 dark:text-white leading-relaxed">{q}</p>
           </div>
 
           <div className="space-y-3">
             <textarea value={answer} onChange={e => setAnswer(e.target.value)}
-              placeholder="Write your answer here in detail…"
+              placeholder={t('yourAnswer')}
               rows={4}
               className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-700 rounded-2xl text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-blue-400 resize-none transition-all" />
             <button onClick={submitAnswer} disabled={!answer.trim() || loading}
               className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 shadow-md shadow-blue-900/30">
-              {loading ? <><Loader2 size={16} className="animate-spin" /> Evaluating…</> : <><Send size={16} /> Submit Answer</>}
+              {loading ? <><Loader2 size={16} className="animate-spin" /> {t('generatingQuiz')}</> : <><Send size={16} /> {t('submitAnswer')}</>}
             </button>
           </div>
         </div>
@@ -270,8 +272,8 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
                   <Star size={12} fill="currentColor" /> {r.marks}/10
                 </span>
               </div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mb-1"><strong>Your answer:</strong> {r.answer}</p>
-              {r.correct && <p className="text-xs text-emerald-700 dark:text-emerald-400 mb-1"><strong>Correct:</strong> {r.correct}</p>}
+              <p className="text-xs text-slate-600 dark:text-slate-400 mb-1"><strong>{t('yourAnswerLabel')}:</strong> {r.answer}</p>
+              {r.correct && <p className="text-xs text-emerald-700 dark:text-emerald-400 mb-1"><strong>{t('correct')}:</strong> {r.correct}</p>}
               <p className="text-xs text-slate-500 dark:text-slate-400">{r.explanation}</p>
             </div>
           ))}
@@ -280,11 +282,11 @@ EXPLANATION: [explain why in 2-3 sentences, mention what student got right/wrong
         <div className="flex gap-3">
           <button onClick={reset}
             className="flex-1 py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2 shadow-md">
-            <RotateCcw size={16} /> Try Again
+            <RotateCcw size={16} /> {t('tryAgain')}
           </button>
           <button onClick={() => setPhase('leaderboard')}
             className="flex-1 py-3 bg-amber-500 hover:bg-amber-400 text-white font-semibold rounded-xl transition-all flex items-center justify-center gap-2 shadow-md">
-            <BarChart3 size={16} /> Leaderboard
+            <BarChart3 size={16} /> {t('viewLeaderboard')}
           </button>
         </div>
       </div>

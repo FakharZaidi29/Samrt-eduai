@@ -20,6 +20,7 @@ import {
   Play,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useLanguage } from '../context/LanguageContext.jsx';
 import { api } from '../services/api.js';
 
 // ─── Media block components ───────────────────────────────────────────────────
@@ -401,21 +402,22 @@ function TypingIndicator() {
 }
 
 function EmptyState({ onNewChat }) {
+  const { t } = useLanguage();
   return (
     <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-blue-900 flex items-center justify-center mb-4 shadow-lg shadow-blue-900/30">
         <MessageCircle size={28} className="text-white" />
       </div>
-      <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Start a Conversation</h2>
+      <h2 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{t('startConversation')}</h2>
       <p className="text-sm text-slate-500 dark:text-slate-400 max-w-xs mb-6 leading-relaxed">
-        Ask EduAI anything — math, science, coding, history, or any topic you want to explore.
+        {t('chatPlaceholderSub')}
       </p>
       <button
         onClick={onNewChat}
         className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl transition-colors shadow-sm shadow-blue-200/50 dark:shadow-blue-900/30"
       >
         <Plus size={16} />
-        New Chat
+        {t('newChat')}
       </button>
     </div>
   );
@@ -453,6 +455,7 @@ function timeAgo(dateStr) {
 
 export default function ChatInterface({ initialTopic, onTopicConsumed }) {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const initials = getInitials(user?.name);
 
   const [sessions, setSessions] = useState([]);
@@ -659,9 +662,9 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
           <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
           <div className="absolute bottom-0 left-0 right-0 bg-white dark:bg-zinc-900 rounded-t-3xl max-h-[75vh] flex flex-col" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100 dark:border-zinc-800">
-              <h3 className="font-semibold text-slate-900 dark:text-white text-sm">Conversations</h3>
+              <h3 className="font-semibold text-slate-900 dark:text-white text-sm">{t('chats')}</h3>
               <button onClick={handleNewChat} className="flex items-center gap-1.5 bg-blue-600 text-white text-xs font-semibold px-3 py-2 rounded-xl">
-                <Plus size={13} /> New Chat
+                <Plus size={13} /> {t('newChat')}
               </button>
             </div>
             <div className="px-3 py-2 border-b border-slate-50 dark:border-zinc-800">
@@ -675,7 +678,7 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
               {sessionsLoading ? (
                 <div className="flex justify-center py-8"><Loader2 size={18} className="animate-spin text-blue-500" /></div>
               ) : filteredSessions.length === 0 ? (
-                <p className="text-xs text-slate-400 px-3 py-4 text-center">{searchQuery ? 'No results' : 'No chats yet'}</p>
+                <p className="text-xs text-slate-400 px-3 py-4 text-center">{searchQuery ? 'No results' : t('noSessions')}</p>
               ) : filteredSessions.map(session => {
                 const isActive = activeSessionId === session._id;
                 return (
@@ -700,7 +703,7 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
             className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition-all duration-150 shadow-sm shadow-blue-200/50 dark:shadow-blue-900/30"
           >
             <Plus size={16} />
-            New Chat
+            {t('newChat')}
           </button>
         </div>
 
@@ -730,7 +733,7 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
             </div>
           ) : filteredSessions.length === 0 ? (
             <p className="text-xs text-slate-400 dark:text-slate-500 px-2 py-4 text-center">
-              {searchQuery ? 'No results found' : 'No chats yet'}
+              {searchQuery ? 'No results found' : t('noSessions')}
             </p>
           ) : (
             filteredSessions.map((session) => {
@@ -790,11 +793,11 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
           <button onClick={() => setMobileSessionsOpen(true)}
             className="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-zinc-800 px-3 py-1.5 rounded-xl">
             <MessageSquare size={13} />
-            Chats ({sessions.length})
+            {t('chats')} ({sessions.length})
           </button>
           <button onClick={handleNewChat}
             className="flex items-center gap-1.5 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 px-3 py-1.5 rounded-xl transition-colors">
-            <Plus size={13} /> New Chat
+            <Plus size={13} /> {t('newChat')}
           </button>
         </div>
 
@@ -879,7 +882,7 @@ export default function ChatInterface({ initialTopic, onTopicConsumed }) {
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder="Ask me anything about your studies…"
+                    placeholder={t('typeMessage')}
                     rows={1}
                     className="w-full bg-transparent text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none resize-none leading-relaxed"
                   />
